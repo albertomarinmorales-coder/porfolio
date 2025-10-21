@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron, Rajdhani, Share_Tech_Mono } from "next/font/google";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -23,6 +24,7 @@ const shareTechMono = Share_Tech_Mono({
 export const metadata: Metadata = {
   title: "ALBERTO | Web Developer",
   description: "Portfolio de Alberto - Desarrollador Web con experiencia en React, Next.js y tecnologías modernas",
+  icons: '/favicon.svg',
 };
 
 export default function RootLayout({
@@ -54,7 +56,9 @@ export default function RootLayout({
         className={`${orbitron.variable} ${rajdhani.variable} ${shareTechMono.variable} font-orbitron antialiased`}
         style={{ fontFamily: 'var(--font-orbitron)' }}
       >
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

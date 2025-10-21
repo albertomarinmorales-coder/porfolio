@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, LucideIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, LucideIcon, Wrench } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface MenuItem {
   id: string;
@@ -27,6 +28,7 @@ interface XMBMenuProps {
 }
 
 export function XMBMenu({ items, onSelect }: XMBMenuProps) {
+  const { t } = useLanguage();
   const [selectedMain, setSelectedMain] = useState(-1); // Sin selección inicial
   const [selectedSub, setSelectedSub] = useState(0);
   const [showSub, setShowSub] = useState(false);
@@ -135,8 +137,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Element;
       
-      // Si el click no es en ningún elemento del menú O en el botón de toggle del tema, deseleccionar
-      if (!target.closest('[data-menu-element]') && !target.closest('[aria-label="Toggle theme"]')) {
+      // Si el click no es en ningún elemento del menú O en el botón de toggle del tema O en el botón de idioma, deseleccionar
+      if (!target.closest('[data-menu-element]') && 
+          !target.closest('[aria-label="Toggle theme"]') && 
+          !target.closest('[aria-label="Toggle language"]')) {
         if (showSub) {
           // Si hay submenú abierto, cerrarlo
           setShowSub(false);
@@ -299,12 +303,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         }`}
                       >
                         {subItem.image && (
-                          <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden">
-                            <img
-                              src={subItem.image}
-                              alt={subItem.title}
-                              className="w-full h-full object-cover"
-                            />
+                          <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden flex items-center justify-center">
+                            <Wrench className="w-4 h-4 text-muted-foreground" />
                           </div>
                         )}
                         <h3
@@ -339,7 +339,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         {items[selectedMain].subItems[selectedSub].showScrollIndicator && (
                           <div className="flex justify-center mt-3 pointer-events-none" style={{ animation: 'none' }}>
                             <div className="flex items-center gap-2 text-primary/90 text-xs bg-background/30 backdrop-blur-sm px-3 py-1 rounded-full border border-primary/30 shadow-lg" style={{ animation: 'none', transform: 'none' }}>
-                              <span>Desliza para ver más</span>
+                              <span>{t("common.scrollMore")}</span>
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
@@ -355,12 +355,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                           </p>
                         )}
                         {items[selectedMain].subItems[selectedSub].image && (
-                          <div className="rounded-lg overflow-hidden">
-                            <img
-                              src={items[selectedMain].subItems[selectedSub].image}
-                              alt={items[selectedMain].subItems[selectedSub].title}
-                              className="w-full h-auto object-cover"
-                            />
+                          <div className="rounded-lg bg-muted p-8 flex items-center justify-center">
+                            <Wrench className="w-16 h-16 text-muted-foreground" />
                           </div>
                         )}
                       </>
@@ -376,7 +372,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                   transition={{ duration: 0.3 }}
                   className="text-center text-muted-foreground p-8"
                 >
-                  <p className="text-sm">← → ↑ ↓ para moverte • Enter/Space para abrir</p>
+                  <p className="text-sm">← → ↑ ↓ {t("common.navigation")}</p>
                 </motion.div>
               )}
             </AnimatePresence>
