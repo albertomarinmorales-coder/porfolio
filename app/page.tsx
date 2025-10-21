@@ -61,64 +61,55 @@ export default function Home() {
           id: "bio",
           title: "Biografía",
           description: "Soy Alberto Marín, desarrollador web y QA apasionado por crear experiencias digitales que sean claras, funcionales y atractivas.",
+          showScrollIndicator: true,
           content: mounted ? (
-            <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide">
-              {/* Contenedor de foto circular */}
-              <div className="flex justify-center">
-                <div className="w-32 h-32 rounded-full bg-linear-to-br from-primary/30 to-secondary/30 border-2 border-primary/50 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(6,189,186,0.3)] relative">
-                  {/* Imagen para tema claro */}
-                  <img
-                    src="/images/handsome/Handsome.png"
-                    alt="Alberto Marín - Tema Claro"
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
-                      isDark ? 'opacity-0' : 'opacity-100'
-                    }`}
-                    onError={(e) => {
-                      console.log("Error cargando imagen clara:", e.currentTarget.src);
-                    }}
-                  />
-                  {/* Imagen para tema oscuro */}
-                  <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                    isDark ? 'opacity-100' : 'opacity-0'
-                  }`}>
+            <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
+              <div className="text-muted-foreground leading-relaxed space-y-6">
+                {/* Contenedor de foto circular */}
+                <div className="flex justify-center">
+                  <div className="w-32 h-32 rounded-full bg-linear-to-br from-primary/30 to-secondary/30 border-2 border-primary/50 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(6,189,186,0.3)] relative">
+                    {/* Imagen para tema claro */}
                     <img
-                      src="/images/handsome/HandSomeSW.png"
-                      alt="Alberto Marín - Tema Oscuro"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      src="/images/handsome/Handsome.png"
+                      alt="Alberto Marín - Tema Claro"
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                        isDark ? 'opacity-0' : 'opacity-100'
+                      }`}
                       onError={(e) => {
-                        console.log("Error cargando imagen oscura:", e.currentTarget.src);
+                        console.log("Error cargando imagen clara:", e.currentTarget.src);
                       }}
                     />
-                    {/* Overlay negro para reducir el brillo */}
-                    <div className="absolute inset-0 bg-black opacity-10"></div>
-                  </div>
-                  {/* Placeholder si fallan ambas imágenes */}
-                  <div className="absolute inset-0 w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
-                    Foto de perfil
+                    {/* Imagen para tema oscuro */}
+                    <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                      isDark ? 'opacity-100' : 'opacity-0'
+                    }`}>
+                      <img
+                        src="/images/handsome/HandSomeSW.png"
+                        alt="Alberto Marín - Tema Oscuro"
+                        className="absolute inset-0 w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log("Error cargando imagen oscura:", e.currentTarget.src);
+                        }}
+                      />
+                      {/* Overlay negro para reducir el brillo */}
+                      <div className="absolute inset-0 bg-black opacity-10"></div>
+                    </div>
+                    {/* Placeholder si fallan ambas imágenes */}
+                    <div className="absolute inset-0 w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
+                      Foto de perfil
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Texto sobre mí */}
-              <div className="text-muted-foreground leading-relaxed space-y-4">
-                <p>
-                  Soy Alberto Marín, desarrollador web y QA apasionado por crear experiencias digitales que sean claras, funcionales y atractivas. Antes de sumergirme en el mundo tech, trabajé como camarero, donde aprendí a gestionar múltiples tareas, resolver problemas bajo presión y mantener la atención al detalle en cada interacción.
-                </p>
-                <p>
-                  Hoy combino esa disciplina con mi curiosidad y creatividad para construir proyectos que me desafían y me permiten seguir aprendiendo, siempre buscando soluciones eficientes y experiencias memorables para los usuarios.
-                </p>
-              </div>
-              
-              {/* INDICADOR TEMPORAL DE DEBUG */}
-              <div style={{
-                backgroundColor: 'red',
-                color: 'white',
-                padding: '10px',
-                textAlign: 'center',
-                marginTop: '10px',
-                fontWeight: 'bold'
-              }}>
-                🔥 BIOGRAFÍA DEBUG - INDICADOR ROJO 🔥
+                
+                {/* Texto sobre mí */}
+                <div className="space-y-4">
+                  <p>
+                    Soy Alberto Marín, desarrollador web y QA apasionado por crear experiencias digitales que sean claras, funcionales y atractivas. Antes de sumergirme en el mundo tech, trabajé como camarero, donde aprendí a gestionar múltiples tareas, resolver problemas bajo presión y mantener la atención al detalle en cada interacción.
+                  </p>
+                  <p>
+                    Hoy combino esa disciplina con mi curiosidad y creatividad para construir proyectos que me desafían y me permiten seguir aprendiendo, siempre buscando soluciones eficientes y experiencias memorables para los usuarios.
+                  </p>
+                </div>
               </div>
             </div>
           ) : null,
@@ -127,6 +118,7 @@ export default function Home() {
           id: "skills",
           title: "Habilidades",
           description: "TypeScript, React, Next.js, Tailwind CSS, y más...",
+          showScrollIndicator: true,
           content: mounted ? (
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
               <div className="text-muted-foreground leading-relaxed space-y-6">
@@ -183,16 +175,6 @@ export default function Home() {
                     y <span className="text-secondary">adaptabilidad</span> para aprender nuevas tecnologías rápidamente.
                   </p>
                 </div>
-                
-                {/* Indicador de scroll */}
-                <div className="flex justify-center mt-6 pointer-events-none">
-                  <div className="flex items-center gap-2 text-primary/90 text-sm animate-bounce bg-background/30 backdrop-blur-sm px-4 py-2 rounded-full border border-primary/30 shadow-lg">
-                    <span>Desliza para ver más</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-                </div>
               </div>
             </div>
           ) : null,
@@ -201,6 +183,7 @@ export default function Home() {
           id: "experience",
           title: "Experiencia",
           description: "Mi trayectoria profesional y proyectos destacados",
+          showScrollIndicator: true,
           content: mounted ? (
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
               <div className="text-muted-foreground leading-relaxed space-y-6">
@@ -247,16 +230,6 @@ export default function Home() {
                       <span className="text-secondary">Task Management App</span>
                       <span className="text-xs text-muted-foreground">TypeScript, DnD</span>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Indicador de scroll */}
-                <div className="flex justify-center mt-6 pointer-events-none">
-                  <div className="flex items-center gap-2 text-primary/90 text-sm animate-bounce bg-background/30 backdrop-blur-sm px-4 py-2 rounded-full border border-primary/30 shadow-lg">
-                    <span>Desliza para ver más</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
                   </div>
                 </div>
               </div>
@@ -327,6 +300,7 @@ export default function Home() {
           id: "email",
           title: "Email",
           description: "Envíame un mensaje directamente",
+          showScrollIndicator: true,
           content: mounted ? (
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
               <div className="text-muted-foreground leading-relaxed space-y-6">
@@ -366,6 +340,7 @@ export default function Home() {
           id: "github",
           title: "GitHub",
           description: "Mis proyectos y contribuciones",
+          showScrollIndicator: true,
           content: mounted ? (
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
               <div className="text-muted-foreground leading-relaxed space-y-6">
@@ -411,6 +386,7 @@ export default function Home() {
           id: "linkedin",
           title: "LinkedIn",
           description: "Conectemos profesionalmente",
+          showScrollIndicator: true,
           content: mounted ? (
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
               <div className="text-muted-foreground leading-relaxed space-y-6">

@@ -18,6 +18,7 @@ export interface SubMenuItem {
   image?: string;
   link?: string;
   content?: React.ReactNode;
+  showScrollIndicator?: boolean;
 }
 
 interface XMBMenuProps {
@@ -332,7 +333,20 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     
                     {/* Si hay contenido personalizado, mostrarlo */}
                     {items[selectedMain].subItems[selectedSub].content ? (
-                      items[selectedMain].subItems[selectedSub].content
+                      <>
+                        {items[selectedMain].subItems[selectedSub].content}
+                        {/* Indicador de scroll si está habilitado */}
+                        {items[selectedMain].subItems[selectedSub].showScrollIndicator && (
+                          <div className="flex justify-center mt-3 pointer-events-none" style={{ animation: 'none' }}>
+                            <div className="flex items-center gap-2 text-primary/90 text-xs bg-background/30 backdrop-blur-sm px-3 py-1 rounded-full border border-primary/30 shadow-lg" style={{ animation: 'none', transform: 'none' }}>
+                              <span>Desliza para ver más</span>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <>
                         {items[selectedMain].subItems[selectedSub].description && (
