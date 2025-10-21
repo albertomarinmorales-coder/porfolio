@@ -26,7 +26,7 @@ interface XMBMenuProps {
 }
 
 export function XMBMenu({ items, onSelect }: XMBMenuProps) {
-  const [selectedMain, setSelectedMain] = useState(0);
+  const [selectedMain, setSelectedMain] = useState(-1); // Sin selección inicial
   const [selectedSub, setSelectedSub] = useState(0);
   const [showSub, setShowSub] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
@@ -40,52 +40,74 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           if (showSub) {
             setShowSub(false);
             setSelectedSub(0);
-          } else {
+          } else if (selectedMain > -1) {
             setSelectedMain((prev) => (prev > 0 ? prev - 1 : items.length - 1));
+          } else {
+            // Si no hay selección, ir al último elemento
+            setSelectedMain(items.length - 1);
           }
           break;
         case "ArrowRight":
           e.preventDefault();
-          // Solo navegar entre categorías principales
           if (showSub) {
             // Si hay submenú abierto, cerrarlo y mover a la siguiente categoría
             setShowSub(false);
             setSelectedSub(0);
           }
-          setSelectedMain((prev) => (prev < items.length - 1 ? prev + 1 : 0));
+          if (selectedMain > -1) {
+            setSelectedMain((prev) => (prev < items.length - 1 ? prev + 1 : 0));
+          } else {
+            // Si no hay selección, ir al primer elemento
+            setSelectedMain(0);
+          }
           break;
         case "ArrowUp":
           e.preventDefault();
-          if (showSub && items[selectedMain]?.subItems) {
+          if (showSub && selectedMain > -1 && items[selectedMain]?.subItems) {
             setSelectedSub((prev) =>
               prev > 0 ? prev - 1 : (items[selectedMain].subItems?.length || 1) - 1
             );
+          } else if (selectedMain === -1) {
+            // Si no hay selección, ir al primer elemento
+            setSelectedMain(0);
           }
           break;
         case "ArrowDown":
           e.preventDefault();
-          if (showSub && items[selectedMain]?.subItems) {
+          if (showSub && selectedMain > -1 && items[selectedMain]?.subItems) {
             setSelectedSub((prev) =>
               prev < (items[selectedMain].subItems?.length || 1) - 1 ? prev + 1 : 0
             );
+          } else if (selectedMain === -1) {
+            // Si no hay selección, ir al primer elemento
+            setSelectedMain(0);
           }
           break;
         case "Enter":
         case " ": // Espacio también abre
           e.preventDefault();
-          if (showSub) {
-            // Si hay submenú abierto, seleccionar el item
-            onSelect?.(items[selectedMain].id, items[selectedMain].subItems?.[selectedSub].id);
-          } else if (items[selectedMain]?.subItems) {
-            // Abrir submenú si existe
-            setShowSub(true);
+          if (selectedMain > -1) {
+            if (showSub) {
+              // Si hay submenú abierto, seleccionar el item
+              onSelect?.(items[selectedMain].id, items[selectedMain].subItems?.[selectedSub].id);
+            } else if (items[selectedMain]?.subItems) {
+              // Abrir submenú si existe
+              setShowSub(true);
+            }
+          } else {
+            // Si no hay selección, ir al primer elemento
+            setSelectedMain(0);
           }
           break;
         case "Escape":
           e.preventDefault();
           if (showSub) {
+            // Si hay submenú abierto, cerrarlo
             setShowSub(false);
             setSelectedSub(0);
+          } else if (selectedMain > -1) {
+            // Si hay una selección pero no submenú, deseleccionar todo
+            setSelectedMain(-1);
           }
           break;
       }
@@ -137,17 +159,21 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 
                 setLastClickTime(now);
               }}
-              className={`flex flex-col items-center gap-3 transition-all duration-300 ${
+              className={`flex flex-col items-center gap-3 transition-all duration-300 focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                 selectedMain === index
                   ? "scale-110"
-                  : "scale-75 opacity-40"
+                  : selectedMain === -1 
+                    ? "scale-90 opacity-60 hover:opacity-80" // Estado sin selección: todos visibles pero sin destaque
+                    : "scale-75 opacity-40 hover:opacity-60"
               }`}
             >
               <div
                 className={`w-20 h-20 rounded-xl flex items-center justify-center transition-all duration-300 ${
                   selectedMain === index
                     ? "bg-primary/20 glow-border text-primary shadow-[0_0_15px_#06bdba,0_0_8px_#06bdba]"
-                    : "bg-muted text-muted-foreground"
+                    : selectedMain === -1
+                      ? "bg-muted/50 text-muted-foreground hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30" // Estado sin selección: hover sutil
+                      : "bg-muted text-muted-foreground hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30"
                 }`}
               >
                 {item.icon ? (
@@ -160,7 +186,9 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 className={`text-sm font-medium transition-all duration-300 ${
                   selectedMain === index
                     ? "text-foreground glow-text"
-                    : "text-muted-foreground"
+                    : selectedMain === -1
+                      ? "text-muted-foreground/70" // Estado sin selección: texto más tenue
+                      : "text-muted-foreground"
                 }`}
               >
                 {item.title}
@@ -179,10 +207,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       </div>
 
       {/* Sub-menú vertical - Posicionado debajo del menú principal */}
-      {items[selectedMain]?.subItems && (
+      {selectedMain > -1 && items[selectedMain]?.subItems && (
         <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 translate-y-16 flex flex-col items-center gap-4 mt-8 z-20">
           <AnimatePresence>
-            {showSub && (
+            {showSub && selectedMain > -1 && (
               <motion.button
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -193,7 +221,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     prev > 0 ? prev - 1 : (items[selectedMain].subItems?.length || 1) - 1
                   )
                 }
-                className="text-muted-foreground hover:text-secondary transition-colors"
+                className="text-muted-foreground hover:text-secondary transition-colors focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
               >
                 <ChevronUp className="w-6 h-6" />
               </motion.button>
@@ -220,10 +248,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                           setSelectedSub(index);
                           onSelect?.(items[selectedMain].id, subItem.id);
                         }}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-fit overflow-hidden ${
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-fit overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                           selectedSub === index
                             ? "bg-secondary/20 glow-secondary scale-105 shadow-[0_0_15px_#c485ff,0_0_8px_#c485ff]"
-                            : "bg-card/50 opacity-60 hover:opacity-80"
+                            : "bg-card/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_8px_#c485ff] hover:shadow-secondary/30"
                         }`}
                       >
                         {subItem.image && (
@@ -298,7 +326,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           </div>
 
           <AnimatePresence>
-            {showSub && (
+            {showSub && selectedMain > -1 && (
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -309,7 +337,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     prev < (items[selectedMain].subItems?.length || 1) - 1 ? prev + 1 : 0
                   )
                 }
-                className="text-muted-foreground hover:text-secondary transition-colors"
+                className="text-muted-foreground hover:text-secondary transition-colors focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
               >
                 <ChevronDown className="w-6 h-6" />
               </motion.button>
