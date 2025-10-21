@@ -304,7 +304,15 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                       >
                         {subItem.image && (
                           <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden flex items-center justify-center">
-                            <Wrench className="w-4 h-4 text-muted-foreground" />
+                            {subItem.image.startsWith('/projects/') ? (
+                              <Wrench className="w-4 h-4 text-muted-foreground" />
+                            ) : (
+                              <img
+                                src={subItem.image}
+                                alt={subItem.title}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
                           </div>
                         )}
                         <h3
@@ -355,8 +363,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                           </p>
                         )}
                         {items[selectedMain].subItems[selectedSub].image && (
-                          <div className="rounded-lg bg-muted p-8 flex items-center justify-center">
-                            <Wrench className="w-16 h-16 text-muted-foreground" />
+                          <div className="rounded-lg overflow-hidden">
+                            {items[selectedMain].subItems[selectedSub].image.startsWith('/projects/') ? (
+                              <div className="bg-muted p-8 flex items-center justify-center">
+                                <Wrench className="w-16 h-16 text-muted-foreground" />
+                              </div>
+                            ) : (
+                              <img
+                                src={items[selectedMain].subItems[selectedSub].image}
+                                alt={items[selectedMain].subItems[selectedSub].title}
+                                className="w-full h-auto object-cover"
+                              />
+                            )}
                           </div>
                         )}
                       </>

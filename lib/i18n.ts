@@ -68,7 +68,9 @@ export const translations = {
       title: "Currículum",
       description: "Mi experiencia profesional y formación",
       download: "Descargar CV",
-      viewPdf: "Ver CV en PDF"
+      viewPdf: "Ver CV en PDF",
+      pdfLabel: "PDF - Alberto Marín",
+      openNewTab: "Abrir en nueva pestaña"
     },
     // Contact section
     contact: {
@@ -164,7 +166,9 @@ export const translations = {
       title: "Resume",
       description: "My professional experience and education",
       download: "Download CV",
-      viewPdf: "View PDF Resume"
+      viewPdf: "View PDF Resume",
+      pdfLabel: "PDF - Alberto Marín",
+      openNewTab: "Open in new tab"
     },
     // Contact section
     contact: {

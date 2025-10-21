@@ -252,4 +252,18 @@ html.dark {
       transform: translateX(0);
     }
   }
+
+  /* Eliminar completamente cualquier cursor o blink */
+  .no-cursor {
+    caret-color: transparent !important;
+    animation: none !important;
+  }
+  
+  .no-cursor::after {
+    display: none !important;
+  }
+  
+  .no-cursor::before {
+    display: none !important;
+  }
 }

@@ -369,7 +369,7 @@ export default function Home() {
                     </div>
                     <div className="flex-1">
                       <p className="text-base font-medium text-primary group-hover:text-cyan-300 transition-colors">{t("resume.download")}</p>
-                      <p className="text-sm text-secondary group-hover:text-primary transition-colors">PDF - Alberto Marín</p>
+                      <p className="text-sm text-secondary group-hover:text-primary transition-colors">{t("resume.pdfLabel")}</p>
                     </div>
                     <svg className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -390,7 +390,7 @@ export default function Home() {
                     </div>
                     <div className="flex-1">
                       <p className="text-base font-medium text-secondary group-hover:text-purple-300 transition-colors">{t("resume.viewPdf")}</p>
-                      <p className="text-sm text-muted-foreground group-hover:text-secondary transition-colors">Abrir en nueva pestaña</p>
+                      <p className="text-sm text-muted-foreground group-hover:text-secondary transition-colors">{t("resume.openNewTab")}</p>
                     </div>
                     <svg className="w-5 h-5 text-secondary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -420,7 +420,7 @@ export default function Home() {
                   <div className="w-16 h-16 mx-auto bg-linear-to-br from-primary/30 to-secondary/30 rounded-full flex items-center justify-center border-2 border-primary/50 shadow-[0_0_20px_rgba(6,189,186,0.3)]">
                     <Mail className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-primary font-semibold text-lg">¡Hablemos!</h3>
+                  <h3 className="text-primary font-semibold text-lg">{t("contact.email.title")}</h3>
                   <p className="text-sm max-w-md mx-auto">
                     {t("contact.email.description")}
                   </p>
@@ -435,7 +435,7 @@ export default function Home() {
                       <Mail className="w-6 h-6 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-base font-medium text-primary group-hover:text-cyan-300 transition-colors">Enviar Email</p>
+                      <p className="text-base font-medium text-primary group-hover:text-cyan-300 transition-colors">{t("contact.email.action")}</p>
                       <p className="text-sm text-secondary group-hover:text-primary transition-colors">albertomarinmorales@gmail.com</p>
                     </div>
                     <svg className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

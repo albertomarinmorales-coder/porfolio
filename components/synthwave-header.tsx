@@ -58,18 +58,27 @@ function MatrixCodeEffect() {
         </motion.span>
       )}
       
-      {/* Texto final con degradado */}
+      {/* Texto final con degradado - SIN PARPADEO */}
       {isComplete && (
         <motion.span
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={{ opacity: 1 }} // Mantener opacidad fija
           transition={{ duration: 0.5 }}
-          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-transparent bg-linear-to-r from-secondary to-primary bg-clip-text"
+          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-transparent bg-linear-to-r from-secondary to-primary bg-clip-text no-cursor"
           style={{
             textShadow: "0 0 10px hsl(var(--secondary) / 0.6), 0 0 20px hsl(var(--primary) / 0.4)",
+            animation: "none !important", // Quitar cualquier animación
+            caretColor: "transparent", // Ocultar cursor de texto
+            WebkitAnimation: "none !important", // Para Safari
+            MozAnimation: "none !important", // Para Firefox
           }}
         >
-          {displayText}
+          <span style={{ 
+            position: "relative",
+            display: "inline-block"
+          }}>
+            {finalText}
+          </span>
         </motion.span>
       )}
       
