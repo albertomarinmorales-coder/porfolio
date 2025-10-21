@@ -96,7 +96,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   }, [selectedMain, selectedSub, showSub, items, onSelect]);
 
   return (
-    <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden retro-grid scanlines pt-32">
+    <div className="relative w-full h-screen overflow-hidden retro-grid scanlines">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
@@ -107,8 +107,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         <span>Abrir</span>
       </div> */}
 
-      {/* Menú principal horizontal */}
-      <div className="flex items-center justify-center gap-12 mb-8">
+      {/* Menú principal horizontal - Posición ajustada */}
+      <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10">
         {/* Botón izquierda oculto */}
         {/* <button
           onClick={() => setSelectedMain((prev) => (prev > 0 ? prev - 1 : items.length - 1))}
@@ -178,9 +178,9 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         </button> */}
       </div>
 
-      {/* Sub-menú vertical */}
+      {/* Sub-menú vertical - Posicionado debajo del menú principal */}
       {items[selectedMain]?.subItems && (
-        <div className="flex flex-col items-center gap-4 mt-8">
+        <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 translate-y-16 flex flex-col items-center gap-4 mt-8 z-20">
           <AnimatePresence>
             {showSub && (
               <motion.button
@@ -200,7 +200,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
             )}
           </AnimatePresence>
 
-          <div className="flex gap-8 max-h-[400px] overflow-hidden">
+          <div className="flex gap-8 max-h-[300px] overflow-hidden w-full max-w-4xl">
             <AnimatePresence mode="wait">
               {showSub ? (
                 <>
@@ -211,7 +211,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="flex flex-col gap-3 items-center w-64 p-6"
+                    className="flex flex-col gap-3 items-center w-80 p-6"
                   >
                     {items[selectedMain].subItems.map((subItem, index) => (
                       <button
@@ -227,7 +227,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         }`}
                       >
                         {subItem.image && (
-                          <div className="w-12 h-12 rounded-md bg-muted flex-shrink-0 overflow-hidden">
+                          <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden">
                             <img
                               src={subItem.image}
                               alt={subItem.title}
@@ -253,24 +253,32 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-4 p-6 rounded-2xl bg-primary/10 border border-primary/20 max-w-md"
+                    className="flex flex-col gap-4 p-6 rounded-2xl bg-primary/10 border border-primary/20 max-w-lg min-w-[500px]"
                   >
                     <h2 className="text-2xl font-bold text-primary">
                       {items[selectedMain].subItems[selectedSub].title}
                     </h2>
-                    {items[selectedMain].subItems[selectedSub].description && (
-                      <p className="text-muted-foreground leading-relaxed">
-                        {items[selectedMain].subItems[selectedSub].description}
-                      </p>
-                    )}
-                    {items[selectedMain].subItems[selectedSub].image && (
-                      <div className="rounded-lg overflow-hidden">
-                        <img
-                          src={items[selectedMain].subItems[selectedSub].image}
-                          alt={items[selectedMain].subItems[selectedSub].title}
-                          className="w-full h-auto object-cover"
-                        />
-                      </div>
+                    
+                    {/* Si hay contenido personalizado, mostrarlo */}
+                    {items[selectedMain].subItems[selectedSub].content ? (
+                      items[selectedMain].subItems[selectedSub].content
+                    ) : (
+                      <>
+                        {items[selectedMain].subItems[selectedSub].description && (
+                          <p className="text-muted-foreground leading-relaxed">
+                            {items[selectedMain].subItems[selectedSub].description}
+                          </p>
+                        )}
+                        {items[selectedMain].subItems[selectedSub].image && (
+                          <div className="rounded-lg overflow-hidden">
+                            <img
+                              src={items[selectedMain].subItems[selectedSub].image}
+                              alt={items[selectedMain].subItems[selectedSub].title}
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
                   </motion.div>
                 </>

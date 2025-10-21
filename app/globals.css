@@ -159,4 +159,14 @@ html.dark {
         oklch(0 0 0 / 0.02) 4px
       );
   }
+  
+  /* Scroll invisible - Ocultar scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
 }

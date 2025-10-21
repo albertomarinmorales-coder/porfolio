@@ -4,8 +4,53 @@ import { XMBMenu, type MenuItem } from "@/components/xmb-menu";
 import { SynthWaveHeader } from "@/components/synthwave-header";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { User, Gamepad2, FileText, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isDark, setIsDark] = useState(() => {
+    // Solo en el cliente, verificar tema guardado o preferencia del sistema
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        return savedTheme === "dark";
+      }
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return true; // valor por defecto del servidor
+  });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Detectar el tema actual inmediatamente
+    const savedTheme = localStorage.getItem("theme");
+    let currentIsDark = true;
+    
+    if (savedTheme) {
+      currentIsDark = savedTheme === "dark";
+    } else {
+      currentIsDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    
+    console.log("Tema inicial:", currentIsDark ? "oscuro" : "claro");
+    setIsDark(currentIsDark);
+    
+    // Observar cambios en el tema
+    const observer = new MutationObserver(() => {
+      const isDarkTheme = document.documentElement.classList.contains("dark");
+      console.log("Cambio de tema detectado:", isDarkTheme ? "oscuro" : "claro");
+      setIsDark(isDarkTheme);
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"]
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+
   const menuItems: MenuItem[] = [
     {
       id: "about",
@@ -15,7 +60,48 @@ export default function Home() {
         {
           id: "bio",
           title: "Biografía",
-          description: "Desarrollador Full Stack apasionado por crear experiencias web únicas",
+          description: "Soy Alberto Marín, desarrollador web y QA apasionado por crear experiencias digitales que sean claras, funcionales y atractivas.",
+          content: mounted ? (
+            <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide">
+              {/* Contenedor de foto circular */}
+              <div className="flex justify-center">
+                <div className="w-32 h-32 rounded-full bg-linear-to-br from-primary/30 to-secondary/30 border-2 border-primary/50 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(6,189,186,0.3)]">
+                  <img
+                    src={(() => {
+                      const imageSrc = isDark ? "/images/handsome/HandSomeSW.png" : "/images/handsome/Handsome.png";
+                      console.log("Imagen seleccionada:", imageSrc, "isDark:", isDark);
+                      return imageSrc;
+                    })()}
+                    alt="Alberto Marín"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.log("Error cargando imagen:", e.currentTarget.src);
+                      // Si no se encuentra la imagen, mostrar placeholder
+                      const target = e.currentTarget as HTMLImageElement;
+                      const placeholder = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      if (placeholder) {
+                        placeholder.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div className="w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
+                    Foto de perfil
+                  </div>
+                </div>
+              </div>
+              
+              {/* Texto sobre mí */}
+              <div className="text-muted-foreground leading-relaxed space-y-4">
+                <p>
+                  Soy Alberto Marín, desarrollador web y QA apasionado por crear experiencias digitales que sean claras, funcionales y atractivas. Antes de sumergirme en el mundo tech, trabajé como camarero, donde aprendí a gestionar múltiples tareas, resolver problemas bajo presión y mantener la atención al detalle en cada interacción.
+                </p>
+                <p>
+                  Hoy combino esa disciplina con mi curiosidad y creatividad para construir proyectos que me desafían y me permiten seguir aprendiendo, siempre buscando soluciones eficientes y experiencias memorables para los usuarios.
+                </p>
+              </div>
+            </div>
+          ) : null,
         },
         {
           id: "skills",
