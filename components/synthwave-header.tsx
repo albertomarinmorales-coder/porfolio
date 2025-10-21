@@ -116,7 +116,7 @@ export function SynthWaveHeader() {
                   initial={{ opacity: 0, scale: 0.8, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-6 whitespace-nowrap"
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
                 >
                   <span className="text-lg md:text-xl lg:text-2xl font-bold text-transparent bg-linear-to-r from-secondary to-accent bg-clip-text tracking-widest block drop-shadow-lg">
                     &lt; Full Stack Developer /&gt;

@@ -117,6 +117,28 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedMain, selectedSub, showSub, items, onSelect]);
 
+  // Manejar clicks fuera del menú para deseleccionar
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Element;
+      
+      // Si el click no es en ningún elemento del menú, deseleccionar
+      if (!target.closest('[data-menu-element]')) {
+        if (showSub) {
+          // Si hay submenú abierto, cerrarlo
+          setShowSub(false);
+          setSelectedSub(0);
+        } else if (selectedMain > -1) {
+          // Si hay una selección pero no submenú, deseleccionar todo
+          setSelectedMain(-1);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [selectedMain, showSub]);
+
   return (
     <div className="relative w-full h-screen overflow-hidden retro-grid scanlines">
       {/* Indicadores de navegación - OCULTOS */}
@@ -130,7 +152,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       </div> */}
 
       {/* Menú principal horizontal - Posición ajustada */}
-      <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10">
+      <div 
+        className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10"
+        data-menu-element="main"
+      >
         {/* Botón izquierda oculto */}
         {/* <button
           onClick={() => setSelectedMain((prev) => (prev > 0 ? prev - 1 : items.length - 1))}
@@ -143,6 +168,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           {items.map((item, index) => (
             <button
               key={item.id}
+              data-menu-element="item"
               onClick={() => {
                 const now = Date.now();
                 const isDoubleClick = now - lastClickTime < 300;
@@ -208,10 +234,14 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
 
       {/* Sub-menú vertical - Posicionado debajo del menú principal */}
       {selectedMain > -1 && items[selectedMain]?.subItems && (
-        <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 translate-y-16 flex flex-col items-center gap-4 mt-8 z-20">
+        <div 
+          className="absolute top-[35%] left-1/2 transform -translate-x-1/2 translate-y-12 flex flex-col items-center gap-4 mt-6 z-20"
+          data-menu-element="submenu"
+        >
           <AnimatePresence>
             {showSub && selectedMain > -1 && (
               <motion.button
+                data-menu-element="nav"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -244,6 +274,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     {items[selectedMain].subItems.map((subItem, index) => (
                       <button
                         key={subItem.id}
+                        data-menu-element="subitem"
                         onClick={() => {
                           setSelectedSub(index);
                           onSelect?.(items[selectedMain].id, subItem.id);
@@ -328,6 +359,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           <AnimatePresence>
             {showSub && selectedMain > -1 && (
               <motion.button
+                data-menu-element="nav"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
