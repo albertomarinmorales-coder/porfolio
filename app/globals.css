@@ -43,9 +43,17 @@
 
 :root {
   --radius: 0.625rem;
-  /* SynthWave Theme - Modo Claro */
-  --background: oklch(0.98 0.005 280);
-  --foreground: oklch(0.15 0.02 280);
+  /* SynthWave Theme - Variables dinámicas para transición suave */
+  --bg-r: 0.98;
+  --bg-g: 0.005;
+  --bg-b: 280;
+  --fg-r: 0.15;
+  --fg-g: 0.02;
+  --fg-b: 280;
+  
+  /* Colores computados usando las variables */
+  --background: oklch(var(--bg-r) var(--bg-g) var(--bg-b));
+  --foreground: oklch(var(--fg-r) var(--fg-g) var(--fg-b));
   --card: oklch(0.95 0.01 280);
   --card-foreground: oklch(0.15 0.02 280);
   --popover: oklch(0.95 0.01 280);
@@ -78,8 +86,14 @@
 }
 
 html.dark {
-  --background: oklch(0.08 0.02 280);
-  --foreground: oklch(0.95 0.015 280);
+  /* Variables dinámicas para tema oscuro */
+  --bg-r: 0.08;
+  --bg-g: 0.02;
+  --bg-b: 280;
+  --fg-r: 0.95;
+  --fg-g: 0.015;
+  --fg-b: 280;
+  
   --card: oklch(0.12 0.025 280);
   --card-foreground: oklch(0.95 0.015 280);
   --popover: oklch(0.12 0.025 280);
@@ -115,12 +129,29 @@ html.dark {
   * {
     @apply border-border outline-ring/50;
   }
+  
+  /* Transiciones suaves para cambios de tema */
+  html {
+    transition: 
+      --bg-r 0.8s ease-in-out,
+      --bg-g 0.8s ease-in-out,
+      --bg-b 0.8s ease-in-out,
+      --fg-r 0.8s ease-in-out,
+      --fg-g 0.8s ease-in-out,
+      --fg-b 0.8s ease-in-out;
+  }
+  
   body {
     background: var(--background);
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Transiciones para elementos comunes */
+  div, section, article, header, footer, nav, aside {
+    transition: background-color 0.8s ease-in-out, border-color 0.8s ease-in-out;
   }
   
   /* Efectos SynthWave sutiles */

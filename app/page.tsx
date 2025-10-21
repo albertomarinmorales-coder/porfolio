@@ -65,27 +65,31 @@ export default function Home() {
             <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide">
               {/* Contenedor de foto circular */}
               <div className="flex justify-center">
-                <div className="w-32 h-32 rounded-full bg-linear-to-br from-primary/30 to-secondary/30 border-2 border-primary/50 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(6,189,186,0.3)]">
+                <div className="w-32 h-32 rounded-full bg-linear-to-br from-primary/30 to-secondary/30 border-2 border-primary/50 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(6,189,186,0.3)] relative">
+                  {/* Imagen para tema claro */}
                   <img
-                    src={(() => {
-                      const imageSrc = isDark ? "/images/handsome/HandSomeSW.png" : "/images/handsome/Handsome.png";
-                      console.log("Imagen seleccionada:", imageSrc, "isDark:", isDark);
-                      return imageSrc;
-                    })()}
-                    alt="Alberto Marín"
-                    className="w-full h-full object-cover"
+                    src="/images/handsome/Handsome.png"
+                    alt="Alberto Marín - Tema Claro"
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                      isDark ? 'opacity-0' : 'opacity-100'
+                    }`}
                     onError={(e) => {
-                      console.log("Error cargando imagen:", e.currentTarget.src);
-                      // Si no se encuentra la imagen, mostrar placeholder
-                      const target = e.currentTarget as HTMLImageElement;
-                      const placeholder = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      if (placeholder) {
-                        placeholder.style.display = 'flex';
-                      }
+                      console.log("Error cargando imagen clara:", e.currentTarget.src);
                     }}
                   />
-                  <div className="w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
+                  {/* Imagen para tema oscuro */}
+                  <img
+                    src="/images/handsome/HandSomeSW.png"
+                    alt="Alberto Marín - Tema Oscuro"
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                      isDark ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onError={(e) => {
+                      console.log("Error cargando imagen oscura:", e.currentTarget.src);
+                    }}
+                  />
+                  {/* Placeholder si fallan ambas imágenes */}
+                  <div className="absolute inset-0 w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
                     Foto de perfil
                   </div>
                 </div>
