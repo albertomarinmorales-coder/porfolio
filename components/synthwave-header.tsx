@@ -22,14 +22,14 @@ export function SynthWaveHeader() {
           className="relative"
         >
           <h1 className="text-7xl md:text-8xl lg:text-9xl font-black tracking-wider relative">
-            {/* Capas de texto para efecto 3D */}
-            <span className="absolute inset-0 text-primary/20 blur-2xl">
+            {/* Capas de texto para efecto 3D - reducido al mínimo */}
+            <span className="absolute inset-0 text-primary/10 blur-sm">
               ALBERTO
             </span>
-            <span className="absolute inset-0 text-secondary/30 translate-x-1 translate-y-1 blur-lg">
+            <span className="absolute inset-0 text-secondary/15 translate-x-0.5 translate-y-0.5">
               ALBERTO
             </span>
-            <span className="absolute inset-0 text-accent/30 -translate-x-1 -translate-y-1 blur-lg">
+            <span className="absolute inset-0 text-accent/15 -translate-x-0.5 -translate-y-0.5">
               ALBERTO
             </span>
             
@@ -65,19 +65,29 @@ export function SynthWaveHeader() {
             </span>
           </h1>
 
-          {/* Líneas decorativas estilo SynthWave */}
+          {/* Líneas decorativas estilo SynthWave - Ecualizador animado */}
           <div className="absolute -bottom-6 left-0 right-0 flex justify-center gap-1">
             {barHeights.map((height, i) => (
               <motion.div
                 key={i}
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                transition={{
-                  delay: 0.3 + i * 0.01,
-                  duration: 0.5,
-                  ease: "easeOut",
-                }}
                 className="w-1 bg-gradient-to-t from-primary/50 to-transparent origin-bottom"
+                animate={{
+                  height: [
+                    `${height * 0.3}px`,
+                    `${height}px`,
+                    `${height * 0.5}px`,
+                    `${height * 0.8}px`,
+                    `${height * 0.4}px`,
+                    `${height}px`,
+                  ],
+                }}
+                transition={{
+                  duration: 1.5 + Math.random() * 0.5,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                  delay: i * 0.02,
+                }}
                 style={{
                   height: `${height}px`,
                 }}
