@@ -37,11 +37,12 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       switch (e.key) {
         case "ArrowLeft":
           e.preventDefault();
-          if (showSub) {
-            setShowSub(false);
-            setSelectedSub(0);
-          } else if (selectedMain > -1) {
+          if (selectedMain > -1) {
             setSelectedMain((prev) => (prev > 0 ? prev - 1 : items.length - 1));
+            // Si hay submenú abierto, resetear la selección del sub pero mantenerlo abierto
+            if (showSub) {
+              setSelectedSub(0);
+            }
           } else {
             // Si no hay selección, ir al último elemento
             setSelectedMain(items.length - 1);
@@ -49,13 +50,12 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           break;
         case "ArrowRight":
           e.preventDefault();
-          if (showSub) {
-            // Si hay submenú abierto, cerrarlo y mover a la siguiente categoría
-            setShowSub(false);
-            setSelectedSub(0);
-          }
           if (selectedMain > -1) {
             setSelectedMain((prev) => (prev < items.length - 1 ? prev + 1 : 0));
+            // Si hay submenú abierto, resetear la selección del sub pero mantenerlo abierto
+            if (showSub) {
+              setSelectedSub(0);
+            }
           } else {
             // Si no hay selección, ir al primer elemento
             setSelectedMain(0);
@@ -117,6 +117,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedMain, selectedSub, showSub, items, onSelect]);
 
+  // Manejar automáticamente el estado del submenú cuando cambia la selección principal
+  useEffect(() => {
+    if (selectedMain > -1 && showSub) {
+      // Si el submenú estaba abierto y cambiamos a un elemento que no tiene subItems, cerrarlo
+      if (!items[selectedMain]?.subItems) {
+        setShowSub(false);
+        setSelectedSub(0);
+      }
+      // Si tiene subItems, mantener el submenú abierto pero resetear la selección
+    }
+  }, [selectedMain, items, showSub]);
+
   // Manejar clicks fuera del menú para deseleccionar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -153,7 +165,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
 
       {/* Menú principal horizontal - Posición ajustada */}
       <div 
-        className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10"
+        className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10"
         data-menu-element="main"
       >
         {/* Botón izquierda oculto */}
@@ -187,37 +199,37 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
               }}
               className={`flex flex-col items-center gap-3 transition-all duration-300 focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                 selectedMain === index
-                  ? "scale-110"
+                  ? "scale-100"
                   : selectedMain === -1 
-                    ? "scale-90 opacity-60 hover:opacity-80" // Estado sin selección: todos visibles pero sin destaque
-                    : "scale-75 opacity-40 hover:opacity-60"
+                    ? "scale-90 hover:scale-95" // Estado sin selección: tamaño intermedio
+                    : "scale-75 hover:scale-80" // Elementos no activos: más pequeños
               }`}
             >
               <div
-                className={`w-20 h-20 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                className={`w-28 h-28 rounded-xl flex items-center justify-center transition-all duration-300 z-1 ${
                   selectedMain === index
-                    ? "bg-primary/20 glow-border text-primary shadow-[0_0_15px_#06bdba,0_0_8px_#06bdba]"
+                    ? "bg-primary/30 backdrop-blur-sm glow-border text-primary shadow-[0_0_15px_#06bdba,0_0_8px_#06bdba] border border-primary/20"
                     : selectedMain === -1
-                      ? "bg-muted/50 text-muted-foreground hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30" // Estado sin selección: hover sutil
-                      : "bg-muted text-muted-foreground hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30"
+                      ? "bg-gray-100 dark:bg-gray-800 text-muted-foreground border border-border hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30" // Fondo gris claro sólido
+                      : "bg-gray-100 dark:bg-gray-800 text-muted-foreground border border-border hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30"
                 }`}
               >
                 {item.icon ? (
-                  <item.icon className="w-10 h-10" strokeWidth={1.5} />
+                  <item.icon className="w-14 h-14" strokeWidth={1.5} />
                 ) : (
-                  <div className="w-10 h-10" />
+                  <div className="w-14 h-14" />
                 )}
               </div>
               <span
-                className={`text-sm font-medium transition-all duration-300 ${
+                className={`text-base font-medium transition-all duration-300 ${
                   selectedMain === index
                     ? "text-foreground glow-text"
                     : selectedMain === -1
-                      ? "text-muted-foreground/70" // Estado sin selección: texto más tenue
+                      ? "text-muted-foreground" // Estado sin selección: texto sólido
                       : "text-muted-foreground"
                 }`}
               >
-                {item.title}
+                {item.title}  
               </span>
             </button>
           ))}
@@ -235,7 +247,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       {/* Sub-menú vertical - Posicionado debajo del menú principal */}
       {selectedMain > -1 && items[selectedMain]?.subItems && (
         <div 
-          className="absolute top-[35%] left-1/2 transform -translate-x-1/2 translate-y-12 flex flex-col items-center gap-4 mt-6 z-20"
+          className="absolute top-[40%] left-1/2 transform -translate-x-1/2 translate-y-12 flex flex-col items-center gap-4 mt-6 z-20"
           data-menu-element="submenu"
         >
           <AnimatePresence>
@@ -281,8 +293,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         }}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-fit overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                           selectedSub === index
-                            ? "bg-secondary/20 glow-secondary scale-105 shadow-[0_0_15px_#c485ff,0_0_8px_#c485ff]"
-                            : "bg-card/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_8px_#c485ff] hover:shadow-secondary/30"
+                            ? "bg-secondary/30 backdrop-blur-sm glow-secondary scale-105 shadow-[0_0_15px_#c485ff,0_0_8px_#c485ff] border border-secondary/20"
+                            : "bg-background/85 backdrop-blur-sm border border-border/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_8px_#c485ff] hover:shadow-secondary/30"
                         }`}
                       >
                         {subItem.image && (
@@ -312,7 +324,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-4 p-6 rounded-2xl bg-primary/10 border border-primary/20 max-w-lg min-w-[500px]"
+                    className="flex flex-col gap-4 p-6 rounded-2xl bg-background/90 backdrop-blur-sm border border-primary/30 shadow-lg max-w-lg min-w-[500px]"
                   >
                     <h2 className="text-2xl font-bold text-primary">
                       {items[selectedMain].subItems[selectedSub].title}

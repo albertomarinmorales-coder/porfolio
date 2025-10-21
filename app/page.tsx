@@ -78,16 +78,20 @@ export default function Home() {
                     }}
                   />
                   {/* Imagen para tema oscuro */}
-                  <img
-                    src="/images/handsome/HandSomeSW.png"
-                    alt="Alberto Marín - Tema Oscuro"
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
-                      isDark ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    onError={(e) => {
-                      console.log("Error cargando imagen oscura:", e.currentTarget.src);
-                    }}
-                  />
+                  <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                    isDark ? 'opacity-100' : 'opacity-0'
+                  }`}>
+                    <img
+                      src="/images/handsome/HandSomeSW.png"
+                      alt="Alberto Marín - Tema Oscuro"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        console.log("Error cargando imagen oscura:", e.currentTarget.src);
+                      }}
+                    />
+                    {/* Overlay negro para reducir el brillo */}
+                    <div className="absolute inset-0 bg-black opacity-10"></div>
+                  </div>
                   {/* Placeholder si fallan ambas imágenes */}
                   <div className="absolute inset-0 w-full h-full bg-muted/50 items-center justify-center text-muted-foreground text-sm hidden">
                     Foto de perfil

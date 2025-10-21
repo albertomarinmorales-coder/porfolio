@@ -3,6 +3,80 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+// Componente Matrix Code Effect
+function MatrixCodeEffect() {
+  const [displayText, setDisplayText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  
+  const finalText = "< Full Stack Developer />";
+  const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]|\\:;\"'<>,.?/~`+-=_";
+  
+  useEffect(() => {
+    let currentIndex = 0;
+    const totalDuration = 2000; // 2 segundos para completar
+    const interval = totalDuration / finalText.length;
+    
+    const animate = () => {
+      if (currentIndex <= finalText.length) {
+        // Texto ya formado + caracteres aleatorios para el resto
+        const formedPart = finalText.slice(0, currentIndex);
+        const remainingLength = Math.max(0, finalText.length - currentIndex);
+        const randomPart = Array.from({ length: remainingLength }, () => 
+          matrixChars[Math.floor(Math.random() * matrixChars.length)]
+        ).join("");
+        
+        setDisplayText(formedPart + randomPart);
+        currentIndex++;
+        
+        if (currentIndex > finalText.length) {
+          setDisplayText(finalText);
+          setIsComplete(true);
+        } else {
+          setTimeout(animate, interval);
+        }
+      }
+    };
+    
+    // Iniciar la animación después de un pequeño delay
+    const startTimer = setTimeout(animate, 500);
+    
+    return () => clearTimeout(startTimer);
+  }, []);
+  
+  return (
+    <div className="relative">
+      {/* Texto durante la animación Matrix */}
+      {!isComplete && (
+        <motion.span
+          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-secondary/80"
+          style={{
+            textShadow: "0 0 5px hsl(var(--secondary) / 0.5)",
+            filter: "blur(0.5px)",
+          }}
+        >
+          {displayText}
+        </motion.span>
+      )}
+      
+      {/* Texto final con degradado */}
+      {isComplete && (
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-transparent bg-linear-to-r from-secondary to-primary bg-clip-text"
+          style={{
+            textShadow: "0 0 10px hsl(var(--secondary) / 0.6), 0 0 20px hsl(var(--primary) / 0.4)",
+          }}
+        >
+          {displayText}
+        </motion.span>
+      )}
+      
+    </div>
+  );
+}
+
 export function SynthWaveHeader() {
   const [barHeights, setBarHeights] = useState<number[]>([]);
   const [glitchActive, setGlitchActive] = useState(false);
@@ -17,16 +91,28 @@ export function SynthWaveHeader() {
       const nextGlitchTime = 2000 + Math.random() * 6000;
       
       setTimeout(() => {
-        // Duración del glitch también random (100-400ms)
-        const glitchDuration = 100 + Math.random() * 300;
+        // LED roto: apagar-encender-apagar muy rápido
         
+        // Primer apagón (un poco más largo)
         setGlitchActive(true);
         
         setTimeout(() => {
-          setGlitchActive(false);
-          // Programar el siguiente glitch
-          scheduleNextGlitch();
-        }, glitchDuration);
+          setGlitchActive(false); // Se apaga al instante
+          
+          setTimeout(() => {
+            setGlitchActive(true); // Se enciende al instante
+            
+            setTimeout(() => {
+              setGlitchActive(false); // Se apaga de nuevo al instante
+              
+              // Programar el siguiente doble glitch
+              scheduleNextGlitch();
+              
+            }, 120); // Se apaga después de 120ms (más tiempo)
+            
+          }, 80); // Pausa de 80ms (apagado, más tiempo)
+          
+        }, 120); // Primer glitch dura 120ms (más tiempo)
         
       }, nextGlitchTime);
     };
@@ -40,7 +126,7 @@ export function SynthWaveHeader() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-0 pointer-events-none">
       <div className="relative flex flex-col items-center pt-0">
         {/* Nombre ALBERTO con efecto SynthWave */}
         <motion.div
@@ -95,7 +181,7 @@ export function SynthWaveHeader() {
             
             {/* Texto principal con gradiente ANIMADO */}
             <span
-              className="relative bg-linear-to-r from-primary via-secondary via-accent to-primary bg-clip-text text-transparent animate-gradient-move"
+              className="relative bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-move"
               style={{
                 backgroundSize: '200% 200%',
                 textShadow: `
@@ -111,23 +197,15 @@ export function SynthWaveHeader() {
               ALBERT
               <span className="relative inline-block">
                 O
-                {/* Subtitle mejorado con mejor tipografía */}
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+                {/* Matrix Code Effect - ÉPICO */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.3 }}
                   className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
                 >
-                  <span className="text-lg md:text-xl lg:text-2xl font-bold text-transparent bg-linear-to-r from-secondary to-accent bg-clip-text tracking-widest block drop-shadow-lg">
-                    &lt; Full Stack Developer /&gt;
-                  </span>
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1.2, duration: 0.6 }}
-                    className="w-full h-0.5 bg-linear-to-r from-transparent via-accent to-transparent mt-2"
-                  />
-                </motion.span>
+                  <MatrixCodeEffect />
+                </motion.div>
               </span>
             </span>
           </h1>
