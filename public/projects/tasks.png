@@ -1,0 +1,13 @@
+<!-- Tasks Placeholder - Replace with actual image -->
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tasksGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#tasksGrad)"/>
+  <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Task Management</text>
+  <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial" font-size="18">App</text>
+  <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial" font-size="12">TypeScript • Drag & Drop</text>
+</svg>

@@ -291,7 +291,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                           setSelectedSub(index);
                           onSelect?.(items[selectedMain].id, subItem.id);
                         }}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-fit overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-64 overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                           selectedSub === index
                             ? "bg-secondary/30 backdrop-blur-sm glow-secondary scale-105 shadow-[0_0_15px_#c485ff,0_0_8px_#c485ff] border border-secondary/20"
                             : "bg-background/85 backdrop-blur-sm border border-border/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_8px_#c485ff] hover:shadow-secondary/30"

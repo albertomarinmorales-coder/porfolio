@@ -87,8 +87,8 @@ export function SynthWaveHeader() {
     
     // Función para programar el próximo glitch con timing completamente random
     const scheduleNextGlitch = () => {
-      // Tiempo random entre 2-8 segundos
-      const nextGlitchTime = 2000 + Math.random() * 6000;
+      // Tiempo random entre 4-12 segundos (antes era 2-8)
+      const nextGlitchTime = 4000 + Math.random() * 8000;
       
       setTimeout(() => {
         // LED roto: apagar-encender-apagar muy rápido
@@ -117,10 +117,10 @@ export function SynthWaveHeader() {
       }, nextGlitchTime);
     };
 
-    // Iniciar el primer glitch después de 3 segundos
+    // Iniciar el primer glitch después de 5 segundos (antes era 3)
     setTimeout(() => {
       scheduleNextGlitch();
-    }, 3000);
+    }, 5000);
 
     // No necesitamos cleanup porque cada timeout se programa individualmente
   }, []);
@@ -142,28 +142,54 @@ export function SynthWaveHeader() {
             {glitchActive && (
               <>
                 <span 
-                  className="absolute inset-0 text-red-500/40 animate-pulse"
+                  className="absolute inset-0 text-red-400/45 animate-pulse"
                   style={{
-                    transform: `translateX(${Math.random() * 4 - 2}px) translateY(${Math.random() * 2 - 1}px)`,
-                    filter: `hue-rotate(${Math.random() * 60}deg)`
+                    transform: `translateX(${Math.random() * 10 - 5}px) translateY(${Math.random() * 6 - 3}px) skewX(${Math.random() * 12 - 6}deg)`,
+                    filter: `hue-rotate(${Math.random() * 40}deg) contrast(140%)`,
+                    clipPath: `polygon(0 ${Math.random() * 20}%, 100% ${Math.random() * 20}%, 100% ${80 + Math.random() * 20}%, 0 ${80 + Math.random() * 20}%)`
                   }}
                 >
                   ALBERTO
                 </span>
                 <span 
-                  className="absolute inset-0 text-cyan-500/40 animate-pulse"
+                  className="absolute inset-0 text-blue-800/40 animate-pulse"
                   style={{
-                    transform: `translateX(${Math.random() * 4 - 2}px) translateY(${Math.random() * 2 - 1}px)`,
-                    filter: `hue-rotate(${Math.random() * 60}deg)`
+                    transform: `translateX(${Math.random() * 12 - 6}px) translateY(${Math.random() * 8 - 4}px) scaleY(${0.85 + Math.random() * 0.3})`,
+                    filter: `hue-rotate(${Math.random() * 60}deg) brightness(130%)`,
+                    clipPath: `polygon(${Math.random() * 25}% 0, 100% 0, ${75 + Math.random() * 25}% 100%, 0 100%)`
                   }}
                 >
                   ALBERTO
                 </span>
                 <span 
-                  className="absolute inset-0 text-green-500/30 animate-pulse"
+                  className="absolute inset-0 text-red-600/35 animate-pulse"
                   style={{
-                    transform: `translateX(${Math.random() * 3 - 1.5}px) translateY(${Math.random() * 3 - 1.5}px)`,
-                    opacity: Math.random() * 0.8 + 0.2
+                    transform: `translateX(${Math.random() * 8 - 4}px) translateY(${Math.random() * 10 - 5}px) skewY(${Math.random() * 10 - 5}deg)`,
+                    filter: `hue-rotate(${Math.random() * 30}deg) saturate(150%)`,
+                    opacity: Math.random() * 0.5 + 0.4,
+                    clipPath: `polygon(0 0, ${50 + Math.random() * 50}% 0, 100% ${Math.random() * 30}%, 100% 100%, ${Math.random() * 50}% 100%, 0 ${70 + Math.random() * 30}%)`
+                  }}
+                >
+                  ALBERTO
+                </span>
+                <span 
+                  className="absolute inset-0 text-blue-900/30 animate-pulse"
+                  style={{
+                    transform: `translateX(${Math.random() * 14 - 7}px) translateY(${Math.random() * 5 - 2.5}px) rotate(${Math.random() * 3 - 1.5}deg)`,
+                    filter: `blur(${Math.random() * 1.5}px) contrast(120%)`,
+                    opacity: Math.random() * 0.4 + 0.3,
+                    textShadow: `${Math.random() * 6 - 3}px ${Math.random() * 6 - 3}px ${Math.random() * 12}px rgba(30,58,138,0.6)`
+                  }}
+                >
+                  ALBERTO
+                </span>
+                <span 
+                  className="absolute inset-0 text-red-500/25 animate-pulse"
+                  style={{
+                    transform: `translateX(${Math.random() * 9 - 4.5}px) translateY(${Math.random() * 7 - 3.5}px) scaleX(${0.8 + Math.random() * 0.4})`,
+                    filter: `hue-rotate(${Math.random() * 50}deg) brightness(110%)`,
+                    opacity: Math.random() * 0.4 + 0.25,
+                    mixBlendMode: 'multiply'
                   }}
                 >
                   ALBERTO
@@ -234,7 +260,7 @@ export function SynthWaveHeader() {
                   opacity: [0.6, 1, 0.8, 1, 0.7, 1, 0.9],
                 }}
                 transition={{
-                  duration: 1.2 + Math.random() * 0.8,
+                  duration: 1.6 + Math.random() * 1.0,
                   repeat: Infinity,
                   repeatType: "reverse",
                   ease: "easeInOut",

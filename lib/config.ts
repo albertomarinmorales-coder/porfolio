@@ -12,10 +12,9 @@ export const portfolioConfig = {
 
   // Redes sociales y contacto
   contact: {
-    email: "tu-email@ejemplo.com",
-    github: "https://github.com/tu-usuario",
-    linkedin: "https://linkedin.com/in/tu-perfil",
-    twitter: "https://twitter.com/tu-usuario",
+    email: "albertomarinmorales@gmail.com",
+    github: "https://github.com/albertomarinmorales-coder",
+    linkedin: "https://www.linkedin.com/in/alberto-marin-morales/",
     portfolio: "https://tu-portfolio.com",
   },
 
