@@ -80,10 +80,26 @@ function MatrixCodeEffect() {
 export function SynthWaveHeader() {
   const [barHeights, setBarHeights] = useState<number[]>([]);
   const [glitchActive, setGlitchActive] = useState(false);
+  const [oBlink, setOBlink] = useState(true); // Estado para el parpadeo de la O
 
   useEffect(() => {
-    // Generar alturas aleatorias más intensas para el ecualizador
-    setBarHeights(Array.from({ length: 50 }, () => Math.random() * 35 + 15));
+    // Generar alturas aleatorias más pequeñas para el ecualizador
+    setBarHeights(Array.from({ length: 50 }, () => Math.random() * 12 + 4));
+    
+    // Efecto de LED roto para la O - parpadeo aleatorio
+    const startOBlinking = () => {
+      const blinkInterval = setInterval(() => {
+        // Parpadeo aleatorio: 90% tiempo encendido, 10% apagado
+        if (Math.random() < 0.1) {
+          setOBlink(false);
+          setTimeout(() => setOBlink(true), 50 + Math.random() * 200); // Apagado entre 50-250ms
+        }
+      }, 100 + Math.random() * 400); // Cada 100-500ms
+
+      return blinkInterval;
+    };
+
+    const oBlinkInterval = startOBlinking();
     
     // Función para programar el próximo glitch con timing completamente random
     const scheduleNextGlitch = () => {
@@ -122,11 +138,14 @@ export function SynthWaveHeader() {
       scheduleNextGlitch();
     }, 5000);
 
-    // No necesitamos cleanup porque cada timeout se programa individualmente
+    // Cleanup
+    return () => {
+      clearInterval(oBlinkInterval);
+    };
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-0 pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
       <div className="relative flex flex-col items-center pt-0">
         {/* Nombre ALBERTO con efecto SynthWave */}
         <motion.div
@@ -221,7 +240,11 @@ export function SynthWaveHeader() {
               }}
             >
               ALBERT
-              <span className="relative inline-block">
+              <span className={`relative inline-block transition-all duration-75 ${
+                oBlink ? 'opacity-100' : 'opacity-20'
+              } ${
+                !oBlink ? 'text-red-500/50 animate-pulse' : ''
+              }`}>
                 O
                 {/* Matrix Code Effect - ÉPICO */}
                 <motion.div
@@ -237,11 +260,11 @@ export function SynthWaveHeader() {
           </h1>
 
           {/* Ecualizador ÉPICO - Barras más dinámicas y coloridas */}
-          <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-0.5">
+          <div className="absolute top-full left-0 right-0 flex justify-center gap-0.5 z-10">
             {barHeights.map((height, i) => (
               <motion.div
                 key={i}
-                className={`w-1.5 origin-bottom rounded-t-sm ${
+                className={`w-1.5 origin-bottom ${
                   i % 4 === 0 ? 'bg-linear-to-t from-primary/60 via-primary/40 to-primary/20' :
                   i % 4 === 1 ? 'bg-linear-to-t from-secondary/60 via-secondary/40 to-secondary/20' :
                   i % 4 === 2 ? 'bg-linear-to-t from-accent/60 via-accent/40 to-accent/20' :
@@ -249,13 +272,13 @@ export function SynthWaveHeader() {
                 }`}
                 animate={{
                   height: [
-                    `${height * 0.2}px`,
-                    `${height * 1.2}px`,
-                    `${height * 0.4}px`,
-                    `${height * 0.9}px`,
-                    `${height * 0.3}px`,
-                    `${height * 1.1}px`,
+                    `2px`,
+                    `${height * 1.8}px`,
                     `${height * 0.6}px`,
+                    `${height * 1.4}px`,
+                    `${height * 0.4}px`,
+                    `${height * 1.6}px`,
+                    `${height * 0.8}px`,
                   ],
                   opacity: [0.6, 1, 0.8, 1, 0.7, 1, 0.9],
                 }}
@@ -267,7 +290,7 @@ export function SynthWaveHeader() {
                   delay: i * 0.015,
                 }}
                 style={{
-                  height: `${height}px`,
+                  height: `2px`,
                   boxShadow: i % 8 === 0 ? `0 0 8px hsl(var(--primary) / 0.5)` :
                             i % 8 === 2 ? `0 0 8px hsl(var(--secondary) / 0.5)` :
                             i % 8 === 4 ? `0 0 8px hsl(var(--accent) / 0.5)` : 'none'
