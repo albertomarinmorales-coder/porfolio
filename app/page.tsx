@@ -51,6 +51,76 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  // Función para cambiar tema (igual que en ThemeToggle)
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    
+    // Crear un overlay suave para la transición
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = newTheme ? '#0c1017' : '#fafafa';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 1s ease-in-out';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '9999';
+    
+    document.body.appendChild(overlay);
+    
+    // Iniciar la transición suave
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+    });
+    
+    // Cambiar el tema a la mitad de la transición
+    setTimeout(() => {
+      setIsDark(newTheme);
+      
+      if (newTheme) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      
+      localStorage.setItem("theme", newTheme ? "dark" : "light");
+      
+      // Comenzar a desvanecer el overlay
+      overlay.style.opacity = '0';
+    }, 500);
+    
+    // Remover el overlay después de que termine
+    setTimeout(() => {
+      if (document.body.contains(overlay)) {
+        document.body.removeChild(overlay);
+      }
+    }, 1500);
+  };
+
+  // Event listener para atajo de teclado "L"
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Solo activar si se presiona "L" o "l" y no hay modificadores
+      if ((e.key === 'L' || e.key === 'l') && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+        // Verificar que no estemos en un input o textarea
+        const activeElement = document.activeElement;
+        const isInputActive = activeElement instanceof HTMLInputElement || 
+                             activeElement instanceof HTMLTextAreaElement ||
+                             (activeElement && activeElement.getAttribute('contenteditable') === 'true');
+        
+        if (!isInputActive) {
+          e.preventDefault();
+          toggleTheme();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDark]);
+
   const menuItems: MenuItem[] = [
     {
       id: "about",

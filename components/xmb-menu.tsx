@@ -135,8 +135,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Element;
       
-      // Si el click no es en ningún elemento del menú, deseleccionar
-      if (!target.closest('[data-menu-element]')) {
+      // Si el click no es en ningún elemento del menú O en el botón de toggle del tema, deseleccionar
+      if (!target.closest('[data-menu-element]') && !target.closest('[aria-label="Toggle theme"]')) {
         if (showSub) {
           // Si hay submenú abierto, cerrarlo
           setShowSub(false);
@@ -294,8 +294,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         }}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-64 overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                           selectedSub === index
-                            ? "bg-secondary/30 backdrop-blur-sm glow-secondary scale-105 shadow-[0_0_15px_#c485ff,0_0_8px_#c485ff] border border-secondary/20"
-                            : "bg-background/85 backdrop-blur-sm border border-border/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_8px_#c485ff] hover:shadow-secondary/30"
+                            ? "bg-secondary/30 backdrop-blur-sm glow-secondary scale-105 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] border border-secondary/20"
+                            : "bg-background/85 backdrop-blur-sm border border-border/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30"
                         }`}
                       >
                         {subItem.image && (
