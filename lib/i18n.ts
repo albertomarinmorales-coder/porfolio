@@ -41,7 +41,7 @@ export const translations = {
         },
         waiter: {
           title: "Camarero", 
-          period: "2020 - 2024",
+          period: "2007 - 2024",
           company: "Sector Hostelería",
           description: "Gestión de múltiples tareas en entornos de alta presión, atención al cliente excepcional y trabajo en equipo. Desarrollé habilidades clave como la resolución rápida de problemas y la atención meticulosa al detalle."
         },
@@ -50,17 +50,21 @@ export const translations = {
     },
     // Projects section
     projects: {
-      portfolio: {
-        title: "Portfolio SynthWave",
-        description: "Portfolio personal con estética retro y navegación tipo XMB"
-      },
       ecommerce: {
         title: "E-commerce Platform",
-        description: "Plataforma de comercio electrónico completa"
+        description: "Plataforma de comercio electrónico completa con carrito de compras, pagos integrados y gestión de productos. Desarrollada con Next.js y Stripe."
+      },
+      dashboard: {
+        title: "Social Dashboard",
+        description: "Dashboard de analytics en tiempo real con visualización de datos, gráficos interactivos y métricas de redes sociales. React y TypeScript."
       },
       taskmanager: {
         title: "Task Management App",
-        description: "Aplicación de gestión de tareas con funcionalidades avanzadas"
+        description: "Aplicación de gestión de tareas con drag & drop, categorías personalizables y sistema de prioridades. Full-stack con base de datos."
+      },
+      auth: {
+        title: "Authentication System",
+        description: "Sistema completo de autenticación con registro, login, recuperación de contraseña y gestión de usuarios. JWT, bcrypt y middleware de seguridad."
       }
     },
     // Resume section
@@ -158,7 +162,7 @@ export const translations = {
         },
         waiter: {
           title: "Waiter",
-          period: "2020 - 2024", 
+          period: "2007 - 2024", 
           company: "Hospitality Sector",
           description: "Managing multiple tasks in high-pressure environments, exceptional customer service and teamwork. I developed key skills such as rapid problem solving and meticulous attention to detail."
         },
@@ -167,17 +171,21 @@ export const translations = {
     },
     // Projects section
     projects: {
-      portfolio: {
-        title: "SynthWave Portfolio",
-        description: "Personal portfolio with retro aesthetics and XMB-style navigation"
-      },
       ecommerce: {
         title: "E-commerce Platform", 
-        description: "Complete e-commerce platform"
+        description: "Complete e-commerce platform with shopping cart, integrated payments and product management. Built with Next.js and Stripe."
+      },
+      dashboard: {
+        title: "Social Dashboard",
+        description: "Real-time analytics dashboard with data visualization, interactive charts and social media metrics. React and TypeScript."
       },
       taskmanager: {
         title: "Task Management App",
-        description: "Task management application with advanced features"
+        description: "Task management application with drag & drop, customizable categories and priority system. Full-stack with database."
+      },
+      auth: {
+        title: "Authentication System",
+        description: "Complete authentication system with registration, login, password recovery and user management. JWT, bcrypt and security middleware."
       }
     },
     // Resume section

@@ -84,7 +84,7 @@ export const portfolioConfig = {
       id: "exp2",
       company: "Startup Innovadora",
       position: "Frontend Developer",
-      period: "2020 - 2022",
+      period: "2007 - 2022",
       description: "Creación de interfaces de usuario modernas y responsivas",
       technologies: ["React", "Next.js", "Tailwind CSS"],
     },

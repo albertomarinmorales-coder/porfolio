@@ -351,16 +351,20 @@ export default function Home() {
                   <h4 className="text-primary font-semibold mb-3 text-sm uppercase tracking-wider">{t("about.experience.projectsTitle")}</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between items-center">
-                      <span className="text-secondary">{t("projects.portfolio.title")}</span>
-                      <span className="text-xs text-muted-foreground">Next.js, Tailwind</span>
-                    </div>
-                    <div className="flex justify-between items-center">
                       <span className="text-secondary">{t("projects.ecommerce.title")}</span>
                       <span className="text-xs text-muted-foreground">Next.js, Stripe</span>
                     </div>
                     <div className="flex justify-between items-center">
+                      <span className="text-secondary">{t("projects.dashboard.title")}</span>
+                      <span className="text-xs text-muted-foreground">React, Charts.js</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span className="text-secondary">{t("projects.taskmanager.title")}</span>
                       <span className="text-xs text-muted-foreground">TypeScript, DnD</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-secondary">{t("projects.auth.title")}</span>
+                      <span className="text-xs text-muted-foreground">JWT, bcrypt</span>
                     </div>
                   </div>
                 </div>
@@ -377,27 +381,27 @@ export default function Home() {
       subItems: [
         {
           id: "project1",
-          title: t("projects.portfolio.title"),
-          description: t("projects.portfolio.description"),
-          image: "/projects/portfolio.png",
-        },
-        {
-          id: "project2",
           title: t("projects.ecommerce.title"),
           description: t("projects.ecommerce.description"),
           image: "/projects/ecommerce.png",
         },
         {
-          id: "project3",
-          title: "Social Dashboard",
-          description: "Dashboard de analytics en tiempo real con React y TypeScript",
+          id: "project2",
+          title: t("projects.dashboard.title"),
+          description: t("projects.dashboard.description"),
           image: "/projects/dashboard.png",
         },
         {
-          id: "project4",
+          id: "project3",
           title: t("projects.taskmanager.title"),
           description: t("projects.taskmanager.description"),
           image: "/projects/tasks.png",
+        },
+        {
+          id: "project4",
+          title: t("projects.auth.title"),
+          description: t("projects.auth.description"),
+          image: "/projects/auth.png",
         },
       ],
     },
