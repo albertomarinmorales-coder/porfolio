@@ -426,7 +426,7 @@ export default function Home() {
                 
                 <div className="flex flex-col gap-3">
                   <a
-                    href="/cv/alberto-marin-cv.pdf"
+                    href="/CV/CV.pdf"
                     download
                     className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors group"
                   >
@@ -443,7 +443,7 @@ export default function Home() {
                   </a>
 
                   <a
-                    href="/cv/alberto-marin-cv.pdf"
+                    href="/CV/CV.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-4 rounded-xl bg-secondary/10 border border-secondary/20 hover:bg-secondary/20 transition-colors group"
