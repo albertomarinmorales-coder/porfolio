@@ -157,7 +157,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   }, [selectedMain, showSub]);
 
   return (
-    <div className="relative w-full min-h-[60vh] retro-grid scanlines py-12">
+    <div className="relative w-full min-h-[60vh] retro-grid scanlines pt-32 pb-12">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
