@@ -44,7 +44,7 @@ export function SynthWaveFooter() {
 
       <div className="relative max-w-7xl mx-auto px-6 py-12">
         {/* Contenido principal del footer */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 max-w-4xl mx-auto">
           {/* Sección de Branding */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,42 +70,11 @@ export function SynthWaveFooter() {
             </div>
           </motion.div>
 
-          {/* Sección de Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
-              {t("footer.quickLinks.title")}
-            </h4>
-            <nav className="flex flex-col gap-2">
-              {[
-                { key: "about", label: t("footer.quickLinks.about") },
-                { key: "projects", label: t("footer.quickLinks.projects") },
-                { key: "skills", label: t("footer.quickLinks.skills") },
-                { key: "contact", label: t("footer.quickLinks.contact") }
-              ].map((item, index) => (
-                <motion.a
-                  key={item.key}
-                  href={`#${item.key}`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group w-fit"
-                  whileHover={{ x: 5 }}
-                >
-                  <span className="w-0 h-[2px] bg-primary group-hover:w-4 transition-all duration-300" />
-                  {item.label}
-                </motion.a>
-              ))}
-            </nav>
-          </motion.div>
-
           {/* Sección de Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
             className="space-y-4"
           >
