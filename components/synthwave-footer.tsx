@@ -62,7 +62,7 @@ export function SynthWaveFooter() {
               </h3>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-              Full Stack Developer passionate about creating immersive digital experiences with modern technologies.
+              {t("footer.branding.tagline")}
             </p>
             <div className="flex items-center gap-2 text-sm text-primary/80">
               <Zap className="w-4 h-4" />
@@ -79,18 +79,23 @@ export function SynthWaveFooter() {
             className="space-y-4"
           >
             <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
-              Quick Links
+              {t("footer.quickLinks.title")}
             </h4>
             <nav className="flex flex-col gap-2">
-              {["About", "Projects", "Skills", "Contact"].map((item, index) => (
+              {[
+                { key: "about", label: t("footer.quickLinks.about") },
+                { key: "projects", label: t("footer.quickLinks.projects") },
+                { key: "skills", label: t("footer.quickLinks.skills") },
+                { key: "contact", label: t("footer.quickLinks.contact") }
+              ].map((item, index) => (
                 <motion.a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
+                  key={item.key}
+                  href={`#${item.key}`}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group w-fit"
                   whileHover={{ x: 5 }}
                 >
                   <span className="w-0 h-[2px] bg-primary group-hover:w-4 transition-all duration-300" />
-                  {item}
+                  {item.label}
                 </motion.a>
               ))}
             </nav>
@@ -105,7 +110,7 @@ export function SynthWaveFooter() {
             className="space-y-4"
           >
             <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
-              Connect
+              {t("footer.connect.title")}
             </h4>
             <div className="flex gap-4">
               {socialLinks.map((social, index) => {
@@ -135,7 +140,7 @@ export function SynthWaveFooter() {
               })}
             </div>
             <p className="text-xs text-muted-foreground mt-4">
-              Feel free to reach out for collaborations or just a friendly chat!
+              {t("footer.connect.description")}
             </p>
           </motion.div>
         </div>
@@ -153,15 +158,15 @@ export function SynthWaveFooter() {
         >
           {/* Copyright y tech stack juntos */}
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-sm text-muted-foreground">
-            <span>© {currentYear} Alberto Marín Morales</span>
+            <span>{t("footer.copyright").replace("{year}", currentYear.toString())}</span>
             <span className="hidden md:inline text-primary/40">•</span>
             <div className="flex items-center gap-2 text-xs">
               <span className="font-mono">
-                Powered by <span className="text-primary font-semibold">Next.js 15</span>
+                {t("footer.poweredBy")} <span className="text-primary font-semibold">Next.js 15</span>
               </span>
               <span className="text-primary/40">•</span>
               <span className="font-mono">
-                Styled with <span className="text-secondary font-semibold">Tailwind v4</span>
+                {t("footer.styledWith")} <span className="text-secondary font-semibold">Tailwind v4</span>
               </span>
             </div>
           </div>

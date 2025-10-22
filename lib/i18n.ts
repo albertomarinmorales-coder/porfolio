@@ -95,6 +95,26 @@ export const translations = {
     common: {
       scrollMore: "Desliza para ver más",
       navigation: "para moverte • Enter/Space para abrir"
+    },
+    // Footer
+    footer: {
+      branding: {
+        tagline: "Desarrollador Full Stack apasionado por crear experiencias digitales inmersivas con tecnologías modernas."
+      },
+      quickLinks: {
+        title: "Enlaces Rápidos",
+        about: "Sobre Mí",
+        projects: "Proyectos",
+        skills: "Habilidades",
+        contact: "Contacto"
+      },
+      connect: {
+        title: "Conectar",
+        description: "¡No dudes en contactar para colaboraciones o simplemente para charlar!"
+      },
+      copyright: "© {year} Alberto Marín Morales",
+      poweredBy: "Desarrollado con",
+      styledWith: "Estilizado con"
     }
   },
   en: {
@@ -193,6 +213,26 @@ export const translations = {
     common: {
       scrollMore: "Scroll to see more",
       navigation: "to navigate • Enter/Space to open"
+    },
+    // Footer
+    footer: {
+      branding: {
+        tagline: "Full Stack Developer passionate about creating immersive digital experiences with modern technologies."
+      },
+      quickLinks: {
+        title: "Quick Links",
+        about: "About",
+        projects: "Projects",
+        skills: "Skills",
+        contact: "Contact"
+      },
+      connect: {
+        title: "Connect",
+        description: "Feel free to reach out for collaborations or just a friendly chat!"
+      },
+      copyright: "© {year} Alberto Marín Morales",
+      poweredBy: "Powered by",
+      styledWith: "Styled with"
     }
   }
 };
