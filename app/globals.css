@@ -225,6 +225,16 @@ html.dark {
     animation: gradient-move 6s ease-in-out infinite;
   }
 
+  /* 🌈 ANIMACIÓN GRADIENTE HORIZONTAL (Secondary -> Primary) 🌈 */
+  @keyframes gradient-x {
+    0%, 100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+  }
+
   /* Mejorar las animaciones de pulso para glitch */
   @keyframes glitch-pulse {
     0%, 100% { 

@@ -58,27 +58,18 @@ function MatrixCodeEffect() {
         </motion.span>
       )}
       
-      {/* Texto final con degradado - SIN PARPADEO */}
+      {/* Texto final con degradado estático de secondary a primary */}
       {isComplete && (
         <motion.span
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }} // Mantener opacidad fija
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-transparent bg-linear-to-r from-secondary to-primary bg-clip-text no-cursor"
+          className="text-lg md:text-xl lg:text-2xl font-mono font-bold tracking-widest block text-transparent bg-linear-to-r from-secondary via-primary to-secondary bg-clip-text"
           style={{
             textShadow: "0 0 10px hsl(var(--secondary) / 0.6), 0 0 20px hsl(var(--primary) / 0.4)",
-            animation: "none !important", // Quitar cualquier animación
-            caretColor: "transparent", // Ocultar cursor de texto
-            WebkitAnimation: "none !important", // Para Safari
-            MozAnimation: "none !important", // Para Firefox
           }}
         >
-          <span style={{ 
-            position: "relative",
-            display: "inline-block"
-          }}>
-            {finalText}
-          </span>
+          {finalText}
         </motion.span>
       )}
       
@@ -255,16 +246,17 @@ export function SynthWaveHeader() {
                 !oBlink ? 'text-red-500/50 animate-pulse' : ''
               }`}>
                 O
-                {/* Matrix Code Effect - ÉPICO */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.3 }}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
-                >
-                  <MatrixCodeEffect />
-                </motion.div>
               </span>
+              {/* Matrix Code Effect - ÉPICO - Movido fuera del blink */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.3 }}
+                className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
+                style={{ marginLeft: '0.5em' }} // Ajuste fino para centrar debajo de la O
+              >
+                <MatrixCodeEffect />
+              </motion.div>
             </span>
           </h1>
 
