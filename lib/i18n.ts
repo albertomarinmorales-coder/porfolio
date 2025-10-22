@@ -109,8 +109,7 @@ export const translations = {
         contact: "Contacto"
       },
       connect: {
-        title: "Conectar",
-        description: "¡No dudes en contactar para colaboraciones o simplemente para charlar!"
+        title: "Conectar"
       },
       copyright: "© {year} Alberto Marín Morales",
       poweredBy: "Desarrollado con",
@@ -227,8 +226,7 @@ export const translations = {
         contact: "Contact"
       },
       connect: {
-        title: "Connect",
-        description: "Feel free to reach out for collaborations or just a friendly chat!"
+        title: "Connect"
       },
       copyright: "© {year} Alberto Marín Morales",
       poweredBy: "Powered by",

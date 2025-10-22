@@ -33,6 +33,32 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const [selectedSub, setSelectedSub] = useState(0);
   const [showSub, setShowSub] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Función para cerrar el submenú con animación suave
+  const closeSubmenuSmoothly = () => {
+    setIsClosing(true);
+    
+    // Hacer scroll suave hacia arriba antes de cerrar si estamos muy abajo
+    const currentScrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const threshold = windowHeight * 0.7; // Si estamos más del 70% hacia abajo
+    
+    if (currentScrollY > threshold) {
+      // Scroll suave hacia una posición más visible
+      window.scrollTo({
+        top: Math.max(0, currentScrollY - windowHeight * 0.5),
+        behavior: 'smooth'
+      });
+    }
+    
+    // Cerrar el submenú después de un breve delay para permitir el scroll
+    setTimeout(() => {
+      setShowSub(false);
+      setSelectedSub(0);
+      setIsClosing(false);
+    }, 300);
+  };
 
   // Navegación con teclado
   useEffect(() => {
@@ -105,9 +131,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         case "Escape":
           e.preventDefault();
           if (showSub) {
-            // Si hay submenú abierto, cerrarlo
-            setShowSub(false);
-            setSelectedSub(0);
+            // Si hay submenú abierto, cerrarlo suavemente
+            closeSubmenuSmoothly();
           } else if (selectedMain > -1) {
             // Si hay una selección pero no submenú, deseleccionar todo
             setSelectedMain(-1);
@@ -142,9 +167,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           !target.closest('[aria-label="Toggle theme"]') && 
           !target.closest('[aria-label="Toggle language"]')) {
         if (showSub) {
-          // Si hay submenú abierto, cerrarlo
-          setShowSub(false);
-          setSelectedSub(0);
+          // Si hay submenú abierto, cerrarlo suavemente
+          closeSubmenuSmoothly();
         } else if (selectedMain > -1) {
           // Si hay una selección pero no submenú, deseleccionar todo
           setSelectedMain(-1);
@@ -196,8 +220,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 } else {
                   // Click simple: solo seleccionar
                   setSelectedMain(index);
-                  setShowSub(false);
-                  setSelectedSub(0);
+                  if (showSub) {
+                    // Si había un submenú abierto, cerrarlo suavemente
+                    closeSubmenuSmoothly();
+                  }
                 }
                 
                 setLastClickTime(now);
@@ -251,9 +277,14 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
 
       {/* Sub-menú vertical - Flujo normal debajo del menú principal */}
       {selectedMain > -1 && items[selectedMain]?.subItems && (
-        <div 
+        <motion.div 
           className="flex flex-col items-center gap-4 w-full max-w-6xl mx-auto px-6"
           data-menu-element="submenu"
+          layout
+          transition={{
+            duration: isClosing ? 0.8 : 0.4,
+            ease: isClosing ? "easeInOut" : "easeOut"
+          }}
         >
           <AnimatePresence>
             {showSub && selectedMain > -1 && (
@@ -261,8 +292,11 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 data-menu-element="nav"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                transition={{ 
+                  duration: isClosing ? 0.8 : 0.3,
+                  ease: isClosing ? "easeInOut" : "easeOut"
+                }}
                 onClick={() =>
                   setSelectedSub((prev) =>
                     prev > 0 ? prev - 1 : (items[selectedMain].subItems?.length || 1) - 1
@@ -284,8 +318,11 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     key="submenu-list"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    exit={{ opacity: 0, x: -20, scale: 0.95 }}
+                    transition={{ 
+                      duration: isClosing ? 0.8 : 0.4, 
+                      ease: isClosing ? "easeInOut" : "easeOut" 
+                    }}
                     className="flex flex-col gap-3 items-center w-80 p-6 max-h-[500px] overflow-y-auto scrollbar-hide"
                   >
                     {items[selectedMain].subItems.map((subItem, index) => (
@@ -331,8 +368,11 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     key={`detail-${selectedSub}`}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
+                    exit={{ opacity: 0, x: 20, scale: 0.95 }}
+                    transition={{ 
+                      duration: isClosing ? 0.8 : 0.3,
+                      ease: isClosing ? "easeInOut" : "easeOut"
+                    }}
                     className="flex flex-col gap-4 p-6 rounded-2xl bg-background/90 backdrop-blur-sm border border-primary/30 shadow-lg max-w-lg min-w-[500px] max-h-[500px] overflow-y-auto"
                   >
                     <h2 className="text-2xl font-bold text-primary">
@@ -386,8 +426,11 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                   key="placeholder"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ 
+                    duration: isClosing ? 0.8 : 0.3,
+                    ease: isClosing ? "easeInOut" : "easeOut"
+                  }}
                   className="text-center text-muted-foreground p-8"
                 >
                   <p className="text-sm">← → ↑ ↓ {t("common.navigation")}</p>
@@ -402,8 +445,11 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 data-menu-element="nav"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                transition={{ 
+                  duration: isClosing ? 0.8 : 0.3,
+                  ease: isClosing ? "easeInOut" : "easeOut"
+                }}
                 onClick={() =>
                   setSelectedSub((prev) =>
                     prev < (items[selectedMain].subItems?.length || 1) - 1 ? prev + 1 : 0
@@ -415,7 +461,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
               </motion.button>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       )}
     </div>
   );

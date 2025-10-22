@@ -8,6 +8,7 @@ import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { User, Gamepad2, FileText, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -23,6 +24,9 @@ export default function Home() {
     return true; // valor por defecto del servidor
   });
   const [mounted, setMounted] = useState(false);
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+  const [previousScrollY, setPreviousScrollY] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -53,6 +57,67 @@ export default function Home() {
     });
     
     return () => observer.disconnect();
+  }, []);
+
+  // Efecto para manejar transiciones suaves del scroll
+  useEffect(() => {
+    let isAnimating = false;
+    
+    const handleSmoothResize = () => {
+      if (isAnimating) return;
+      
+      isAnimating = true;
+      const currentScrollY = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+      const maxScrollY = documentHeight - windowHeight;
+      
+      // Si estamos scrolleados más abajo de lo que permite el nuevo contenido
+      if (currentScrollY > maxScrollY && maxScrollY >= 0) {
+        const targetScrollY = Math.max(0, maxScrollY);
+        
+        // Crear una animación suave personalizada
+        const startScrollY = currentScrollY;
+        const scrollDifference = targetScrollY - startScrollY;
+        const duration = 600; // 600ms para una transición más suave
+        const startTime = performance.now();
+        
+        const animateScroll = (currentTime: number) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Usar easing para una animación más natural
+          const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+          const newScrollY = startScrollY + (scrollDifference * easeOutCubic);
+          
+          window.scrollTo(0, newScrollY);
+          
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          } else {
+            isAnimating = false;
+          }
+        };
+        
+        requestAnimationFrame(animateScroll);
+      } else {
+        isAnimating = false;
+      }
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      // Delay más largo para permitir que las animaciones de Framer Motion terminen
+      setTimeout(handleSmoothResize, 200);
+    });
+    
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+      resizeObserver.observe(mainElement);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   // Función para cambiar tema (igual que en ThemeToggle)
@@ -552,9 +617,18 @@ export default function Home() {
       <SynthWaveHeader />
       <LanguageToggle />
       <ThemeToggle />
-      <div className="flex-1">
+      <motion.div 
+        className="flex-1 flex items-center justify-center"
+        layout
+        transition={{
+          type: "spring",
+          stiffness: 120,
+          damping: 20,
+          mass: 2
+        }}
+      >
         <XMBMenu items={menuItems} onSelect={handleSelect} />
-      </div>
+      </motion.div>
       <SynthWaveFooter />
     </main>
   );
