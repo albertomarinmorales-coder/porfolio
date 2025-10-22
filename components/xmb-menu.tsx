@@ -157,7 +157,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   }, [selectedMain, showSub]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden retro-grid scanlines">
+    <div className="relative w-full min-h-[60vh] retro-grid scanlines py-12">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
@@ -168,9 +168,9 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         <span>Abrir</span>
       </div> */}
 
-      {/* Menú principal horizontal - Posición ajustada */}
+      {/* Menú principal horizontal - Centrado con flujo normal */}
       <div 
-        className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-12 z-10"
+        className="flex items-center justify-center gap-12 mb-12"
         data-menu-element="main"
       >
         {/* Botón izquierda oculto */}
@@ -249,10 +249,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         </button> */}
       </div>
 
-      {/* Sub-menú vertical - Posicionado debajo del menú principal */}
+      {/* Sub-menú vertical - Flujo normal debajo del menú principal */}
       {selectedMain > -1 && items[selectedMain]?.subItems && (
         <div 
-          className="absolute top-[40%] left-1/2 transform -translate-x-1/2 translate-y-12 flex flex-col items-center gap-4 mt-6 z-20"
+          className="flex flex-col items-center gap-4 w-full max-w-6xl mx-auto px-6"
           data-menu-element="submenu"
         >
           <AnimatePresence>
@@ -275,7 +275,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
             )}
           </AnimatePresence>
 
-          <div className="flex gap-8 max-h-[300px] overflow-hidden w-full max-w-4xl">
+          <div className="flex gap-8 w-full justify-center mb-8">
             <AnimatePresence mode="wait">
               {showSub ? (
                 <>
@@ -286,7 +286,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="flex flex-col gap-3 items-center w-80 p-6"
+                    className="flex flex-col gap-3 items-center w-80 p-6 max-h-[500px] overflow-y-auto scrollbar-hide"
                   >
                     {items[selectedMain].subItems.map((subItem, index) => (
                       <button
@@ -333,7 +333,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-4 p-6 rounded-2xl bg-background/90 backdrop-blur-sm border border-primary/30 shadow-lg max-w-lg min-w-[500px]"
+                    className="flex flex-col gap-4 p-6 rounded-2xl bg-background/90 backdrop-blur-sm border border-primary/30 shadow-lg max-w-lg min-w-[500px] max-h-[500px] overflow-y-auto"
                   >
                     <h2 className="text-2xl font-bold text-primary">
                       {items[selectedMain].subItems[selectedSub].title}

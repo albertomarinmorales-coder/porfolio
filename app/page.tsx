@@ -2,6 +2,7 @@
 
 import { XMBMenu, type MenuItem } from "@/components/xmb-menu";
 import { SynthWaveHeader } from "@/components/synthwave-header";
+import { SynthWaveFooter } from "@/components/synthwave-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -547,11 +548,14 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background dark relative">
+    <main className="min-h-screen bg-background dark relative flex flex-col">
       <SynthWaveHeader />
       <LanguageToggle />
       <ThemeToggle />
-      <XMBMenu items={menuItems} onSelect={handleSelect} />
+      <div className="flex-1">
+        <XMBMenu items={menuItems} onSelect={handleSelect} />
+      </div>
+      <SynthWaveFooter />
     </main>
   );
 }

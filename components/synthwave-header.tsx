@@ -145,7 +145,7 @@ export function SynthWaveHeader() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+    <div className="relative top-0 left-0 right-0 z-50 pointer-events-none">
       <div className="relative flex flex-col items-center pt-0">
         {/* Nombre ALBERTO con efecto SynthWave */}
         <motion.div
@@ -246,17 +246,16 @@ export function SynthWaveHeader() {
                 !oBlink ? 'text-red-500/50 animate-pulse' : ''
               }`}>
                 O
+                {/* Matrix Code Effect - ÉPICO - Posicionado debajo de la O */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.3 }}
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
+                >
+                  <MatrixCodeEffect />
+                </motion.div>
               </span>
-              {/* Matrix Code Effect - ÉPICO - Movido fuera del blink */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.3 }}
-                className="absolute left-1/2 -translate-x-1/2 top-full mt-8 whitespace-nowrap"
-                style={{ marginLeft: '0.5em' }} // Ajuste fino para centrar debajo de la O
-              >
-                <MatrixCodeEffect />
-              </motion.div>
             </span>
           </h1>
 
