@@ -10,11 +10,11 @@
 
 ---
 
-## 🎨 **ABOUT THIS PROJECT**
+## **ABOUT THIS PROJECT**
 
 A modern, **SynthWave-themed portfolio** built with cutting-edge web technologies. This project showcases a unique retro-futuristic aesthetic combined with smooth animations and a responsive design.
 
-### 🚀 **Tech Stack**
+###  **Tech Stack**
 
 ```typescript
 const techStack = {
@@ -27,19 +27,19 @@ const techStack = {
 };
 ```
 
-### ✨ **Features**
+###  **Features**
 
-- 🎭 **Dynamic SynthWave Theme** - Immersive retro-futuristic design
-- 🌈 **Smooth Gradient Animations** - Eye-catching color transitions
-- ⚡ **Matrix Code Effect** - Epic text reveal animations
-- 🎵 **Audio Visualizer** - Animated equalizer bars
-- 🔥 **LED Glitch Effects** - Authentic retro LED simulations
-- 📱 **Fully Responsive** - Optimized for all devices
-- 🌙 **Dark Mode** - Comfortable viewing experience
+-  **Dynamic SynthWave Theme** - Immersive retro-futuristic design
+-  **Smooth Gradient Animations** - Eye-catching color transitions
+-  **Matrix Code Effect** - Epic text reveal animations
+-  **Audio Visualizer** - Animated equalizer bars
+-  **LED Glitch Effects** - Authentic retro LED simulations
+-  **Fully Responsive** - Optimized for all devices
+-  **Dark Mode** - Comfortable viewing experience
 
 ---
 
-## 🛠️ **GETTING STARTED**
+## **GETTING STARTED**
 
 ### **Prerequisites**
 
@@ -49,23 +49,23 @@ Make sure you have the following installed:
 
 ### **Installation**
 
-1️⃣ **Clone the repository**
+- 1 **Clone the repository**
 ```bash
 git clone https://github.com/albertomarinmorales-coder/porfolio.git
 cd porfolio
 ```
 
-2️⃣ **Install dependencies**
+- 2 **Install dependencies**
 ```bash
 npm install
 ```
 
-3️⃣ **Run the development server**
+- 3**Run the development server**
 ```bash
 npm run dev
 ```
 
-4️⃣ **Open your browser**
+- 4 **Open your browser**
 ```
 Navigate to http://localhost:3000
 ```
@@ -79,15 +79,15 @@ npm start
 
 ---
 
-## 👨‍💻 **ABOUT ME**
+## **ABOUT ME**
 
 I'm **Alberto**, a passionate **Full Stack Developer** who loves creating immersive digital experiences. I specialize in:
 
-- 🎯 Building modern web applications with **Next.js** and **React**
-- 🎨 Crafting beautiful UIs with **Tailwind CSS** and **Framer Motion**
-- ⚡ Optimizing performance with **Turbopack** and modern tooling
-- 🔧 Writing clean, maintainable **TypeScript** code
-- 🌐 Creating responsive, accessible, and user-friendly interfaces
+-  Building modern web applications with **Next.js** and **React**
+-  Crafting beautiful UIs with **Tailwind CSS** and **Framer Motion**
+-  Optimizing performance with **Turbopack** and modern tooling
+-  Writing clean, maintainable **TypeScript** code
+-  Creating responsive, accessible, and user-friendly interfaces
 
 ### **My Development Philosophy**
 
@@ -132,14 +132,14 @@ The SynthWave theme uses these vibrant colors:
 
 ```css
 /* Primary Colors */
---primary: oklch(0.75 0.22 300);    /* Purple Vibrante 💜 */
---secondary: oklch(0.7 0.2 190);    /* Cyan Vibrante 🩵 */
---accent: oklch(0.72 0.24 320);     /* Pink Vibrante 💗 */
+--primary: oklch(0.75 0.22 300);    /* Purple Vibrante */
+--secondary: oklch(0.7 0.2 190);    /* Cyan Vibrante */
+--accent: oklch(0.72 0.24 320);     /* Pink Vibrante */
 ```
 
 ---
 
-## 🚀 **SCRIPTS**
+##  **SCRIPTS**
 
 | Command | Description |
 |---------|-------------|
@@ -149,7 +149,7 @@ The SynthWave theme uses these vibrant colors:
 
 ---
 
-## 📝 **LICENSE**
+##  **LICENSE**
 
 This project is open source and available for educational purposes.
 
@@ -157,9 +157,9 @@ This project is open source and available for educational purposes.
 
 <div align="center">
 
-### 🌟 **MADE WITH PASSION** 🌟
+###  **MADE WITH PASSION** 
 
-**Built with ❤️ by Alberto**
+**Built by Alberto**
 
 [![GitHub](https://img.shields.io/badge/GitHub-albertomarinmorales--coder-purple?style=for-the-badge&logo=github)](https://github.com/albertomarinmorales-coder)
 
@@ -167,10 +167,9 @@ This project is open source and available for educational purposes.
 
 ```
 ┌─────────────────────────────────────────┐
-│  "Code is like humor.                  │
-│   When you have to explain it,         │
-│   it's bad."                            │
-│                    - Cory House         │
+│  "Don't Panic."                         │
+│                                         │
+│  - The Hitchhiker's Guide to the Galaxy │
 └─────────────────────────────────────────┘
 ```
 
