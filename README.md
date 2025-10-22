@@ -1,40 +1,179 @@
-# 🌆 Portfolio SynthWave
+<div align="center">
 
-Portfolio personal con estética **SynthWave** sutil y navegación estilo **XMB** (XrossMediaBar) inspirada en PSP/PS3.
+# 🌆 ALBERTO'S PORTFOLIO 🌆
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### `< Full Stack Developer />`
 
-## Getting Started
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=A855F7&center=true&vCenter=true&width=940&lines=Welcome+to+the+SynthWave+Experience+%F0%9F%8C%83" alt="Welcome" />
 
-First, run the development server:
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🎨 **ABOUT THIS PROJECT**
+
+A modern, **SynthWave-themed portfolio** built with cutting-edge web technologies. This project showcases a unique retro-futuristic aesthetic combined with smooth animations and a responsive design.
+
+### 🚀 **Tech Stack**
+
+```typescript
+const techStack = {
+  framework: "Next.js 15.5.6",
+  language: "TypeScript",
+  styling: "Tailwind CSS v4",
+  animations: "Framer Motion",
+  icons: "Lucide React",
+  theme: "SynthWave Retro-Futuristic"
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ✨ **Features**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 🎭 **Dynamic SynthWave Theme** - Immersive retro-futuristic design
+- 🌈 **Smooth Gradient Animations** - Eye-catching color transitions
+- ⚡ **Matrix Code Effect** - Epic text reveal animations
+- 🎵 **Audio Visualizer** - Animated equalizer bars
+- 🔥 **LED Glitch Effects** - Authentic retro LED simulations
+- 📱 **Fully Responsive** - Optimized for all devices
+- 🌙 **Dark Mode** - Comfortable viewing experience
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ **GETTING STARTED**
 
-To learn more about Next.js, take a look at the following resources:
+### **Prerequisites**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Make sure you have the following installed:
+- **Node.js** (v18 or higher)
+- **npm** or **yarn** or **pnpm**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **Installation**
 
-## Deploy on Vercel
+1️⃣ **Clone the repository**
+```bash
+git clone https://github.com/albertomarinmorales-coder/porfolio.git
+cd porfolio
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2️⃣ **Install dependencies**
+```bash
+npm install
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3️⃣ **Run the development server**
+```bash
+npm run dev
+```
+
+4️⃣ **Open your browser**
+```
+Navigate to http://localhost:3000
+```
+
+### **Build for Production**
+
+```bash
+npm run build
+npm start
+```
+
+---
+
+## 👨‍💻 **ABOUT ME**
+
+I'm **Alberto**, a passionate **Full Stack Developer** who loves creating immersive digital experiences. I specialize in:
+
+- 🎯 Building modern web applications with **Next.js** and **React**
+- 🎨 Crafting beautiful UIs with **Tailwind CSS** and **Framer Motion**
+- ⚡ Optimizing performance with **Turbopack** and modern tooling
+- 🔧 Writing clean, maintainable **TypeScript** code
+- 🌐 Creating responsive, accessible, and user-friendly interfaces
+
+### **My Development Philosophy**
+
+```javascript
+const myApproach = {
+  code: "Clean, maintainable, and scalable",
+  design: "User-first, aesthetic, and functional",
+  mindset: "Always learning, always improving",
+  motto: "Code with passion, build with purpose"
+};
+```
+
+---
+
+## 📂 **PROJECT STRUCTURE**
+
+```
+porfolio/
+├── 📁 app/               # Next.js app directory
+│   ├── layout.tsx        # Root layout with theme providers
+│   ├── page.tsx          # Main page component
+│   └── globals.css       # Global styles and animations
+├── 📁 components/        # React components
+│   ├── synthwave-header.tsx   # Epic header with animations
+│   ├── theme-toggle.tsx       # Dark mode toggle
+│   └── ...
+├── 📁 contexts/          # React contexts
+│   └── LanguageContext.tsx    # i18n support
+├── 📁 lib/               # Utility functions
+│   ├── config.ts         # App configuration
+│   ├── i18n.ts           # Internationalization
+│   └── utils.ts          # Helper functions
+├── 📁 public/            # Static assets
+└── 📄 package.json       # Dependencies
+```
+
+---
+
+## 🎨 **COLOR PALETTE**
+
+The SynthWave theme uses these vibrant colors:
+
+```css
+/* Primary Colors */
+--primary: oklch(0.75 0.22 300);    /* Purple Vibrante 💜 */
+--secondary: oklch(0.7 0.2 190);    /* Cyan Vibrante 🩵 */
+--accent: oklch(0.72 0.24 320);     /* Pink Vibrante 💗 */
+```
+
+---
+
+## 🚀 **SCRIPTS**
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with Turbopack |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+
+---
+
+## 📝 **LICENSE**
+
+This project is open source and available for educational purposes.
+
+---
+
+<div align="center">
+
+### 🌟 **MADE WITH PASSION** 🌟
+
+**Built with ❤️ by Alberto**
+
+[![GitHub](https://img.shields.io/badge/GitHub-albertomarinmorales--coder-purple?style=for-the-badge&logo=github)](https://github.com/albertomarinmorales-coder)
+
+---
+
+```
+┌─────────────────────────────────────────┐
+│  "Code is like humor.                  │
+│   When you have to explain it,         │
+│   it's bad."                            │
+│                    - Cory House         │
+└─────────────────────────────────────────┘
+```
+
+### ⭐ **If you like this project, give it a star!** ⭐
+
+</div>
