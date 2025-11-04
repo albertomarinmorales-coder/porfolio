@@ -414,6 +414,19 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                               <div className="bg-muted p-8 flex items-center justify-center">
                                 <Wrench className="w-16 h-16 text-muted-foreground" />
                               </div>
+                            ) : items[selectedMain].subItems[selectedSub].link ? (
+                              <a 
+                                href={items[selectedMain].subItems[selectedSub].link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block cursor-pointer hover:opacity-80 transition-opacity"
+                              >
+                                <img
+                                  src={items[selectedMain].subItems[selectedSub].image}
+                                  alt={items[selectedMain].subItems[selectedSub].title}
+                                  className="w-full h-auto object-cover"
+                                />
+                              </a>
                             ) : (
                               <img
                                 src={items[selectedMain].subItems[selectedSub].image}
