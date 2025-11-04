@@ -44,7 +44,7 @@ export function SynthWaveFooter() {
       }}
     >
       {/* Grid de fondo retro */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+      <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#a855f7_1px,transparent_1px),linear-gradient(to_bottom,#a855f7_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
@@ -129,9 +129,6 @@ export function SynthWaveFooter() {
             </div>
           </motion.div>
         </div>
-
-        {/* Divisor con efecto retro */}
-        <div className="relative h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-3" />
 
         {/* Bottom section - Mejorado */}
         <motion.div

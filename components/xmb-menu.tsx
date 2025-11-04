@@ -343,6 +343,12 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                           <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden flex items-center justify-center">
                             {subItem.image.startsWith('/projects/') ? (
                               <Wrench className="w-4 h-4 text-muted-foreground" />
+                            ) : subItem.id === 'project1' || subItem.title.includes('Fresh Market') ? (
+                              <img
+                                src="/images/cart-favicon.svg"
+                                alt="Cart icon"
+                                className="w-8 h-8 object-contain"
+                              />
                             ) : (
                               <img
                                 src={subItem.image}

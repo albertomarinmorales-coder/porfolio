@@ -1,4 +1,4 @@
-<!-- E-commerce Placeholder - Replace with actual image -->
+<!-- Fresh Market Placeholder - Replace with actual image -->
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="ecommerceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -7,7 +7,8 @@
     </linearGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#ecommerceGrad)"/>
-  <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">E-commerce</text>
-  <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial" font-size="18">Platform</text>
-  <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial" font-size="12">Next.js • Stripe • Tailwind</text>
+  <!-- Embedding cart-favicon icon -->
+  <image x="150" y="80" width="100" height="100" href="/images/cart-favicon.svg"/>
+  <text x="50%" y="65%" text-anchor="middle" fill="white" font-family="Arial" font-size="24" font-weight="bold">Fresh Market</text>
+  <text x="50%" y="80%" text-anchor="middle" fill="white" font-family="Arial" font-size="12">Next.js • Stripe • Tailwind</text>
 </svg>

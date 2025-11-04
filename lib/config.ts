@@ -40,12 +40,12 @@ export const portfolioConfig = {
     },
     {
       id: "project2",
-      title: "E-commerce Platform",
+      title: "Fresh Market",
       description: "Plataforma de comercio electrónico con Next.js y Stripe",
       image: "/projects/ecommerce.png",
       tags: ["Next.js", "Stripe", "PostgreSQL"],
-      github: "https://github.com/tu-usuario/ecommerce",
-      demo: "https://tu-ecommerce.com",
+      github: "https://github.com/albertomarinmorales-coder/porfolio",
+      demo: "https://github.com/albertomarinmorales-coder/porfolio",
       featured: true,
     },
     {

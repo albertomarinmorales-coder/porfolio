@@ -383,7 +383,7 @@ export default function Home() {
           id: "project1",
           title: t("projects.ecommerce.title"),
           description: t("projects.ecommerce.description"),
-          image: "/projects/ecommerce.png",
+          image: "/images/preMarket.png",
         },
         {
           id: "project2",

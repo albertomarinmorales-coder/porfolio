@@ -51,7 +51,7 @@ export const translations = {
     // Projects section
     projects: {
       ecommerce: {
-        title: "E-commerce Platform",
+        title: "Fresh Market",
         description: "Plataforma de comercio electrónico completa con carrito de compras, pagos integrados y gestión de productos. Desarrollada con Next.js y Stripe."
       },
       dashboard: {
@@ -172,7 +172,7 @@ export const translations = {
     // Projects section
     projects: {
       ecommerce: {
-        title: "E-commerce Platform", 
+        title: "Fresh Market", 
         description: "Complete e-commerce platform with shopping cart, integrated payments and product management. Built with Next.js and Stripe."
       },
       dashboard: {
