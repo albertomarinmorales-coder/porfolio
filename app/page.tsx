@@ -384,7 +384,7 @@ export default function Home() {
           title: t("projects.ecommerce.title"),
           description: t("projects.ecommerce.description"),
           image: "/images/preMarket.png",
-          link: "https://freshmarket-dcal5gmq0-albertos-projects-e6c4ac4f.vercel.app/",
+          link: "https://freshmarket-one.vercel.app/",
         },
         {
           id: "project2",

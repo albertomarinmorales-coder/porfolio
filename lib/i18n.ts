@@ -98,7 +98,7 @@ export const translations = {
     // Common
     common: {
       scrollMore: "Desliza para ver más",
-      navigation: "para moverte • Enter/Space para abrir"
+      navigation: "para moverte • Enter/Space para abrir o cerrar"
     },
     // Footer
     footer: {
@@ -219,7 +219,7 @@ export const translations = {
     // Common
     common: {
       scrollMore: "Scroll to see more",
-      navigation: "to navigate • Enter/Space to open"
+      navigation: "to navigate • Enter/Space to open or close"
     },
     // Footer
     footer: {

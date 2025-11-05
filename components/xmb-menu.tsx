@@ -113,15 +113,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           }
           break;
         case "Enter":
-        case " ": // Espacio también abre
+        case " ": // Espacio también funciona como toggle
           e.preventDefault();
           if (selectedMain > -1) {
-            if (showSub) {
-              // Si hay submenú abierto, seleccionar el item
-              onSelect?.(items[selectedMain].id, items[selectedMain].subItems?.[selectedSub].id);
-            } else if (items[selectedMain]?.subItems) {
-              // Abrir submenú si existe
-              setShowSub(true);
+            if (items[selectedMain]?.subItems) {
+              // Toggle del submenú: abrir si está cerrado, cerrar si está abierto
+              if (showSub) {
+                // Si está abierto, cerrarlo suavemente
+                closeSubmenuSmoothly();
+              } else {
+                // Si está cerrado, abrirlo
+                setShowSub(true);
+              }
             }
           } else {
             // Si no hay selección, ir al primer elemento
@@ -157,28 +160,28 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     }
   }, [selectedMain, items, showSub]);
 
-  // Manejar clicks fuera del menú para deseleccionar
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Element;
-      
-      // Si el click no es en ningún elemento del menú O en el botón de toggle del tema O en el botón de idioma, deseleccionar
-      if (!target.closest('[data-menu-element]') && 
-          !target.closest('[aria-label="Toggle theme"]') && 
-          !target.closest('[aria-label="Toggle language"]')) {
-        if (showSub) {
-          // Si hay submenú abierto, cerrarlo suavemente
-          closeSubmenuSmoothly();
-        } else if (selectedMain > -1) {
-          // Si hay una selección pero no submenú, deseleccionar todo
-          setSelectedMain(-1);
-        }
-      }
-    };
+  // Comentado: Ya no cerramos el menú al hacer clic fuera
+  // useEffect(() => {
+  //   const handleClickOutside = (e: MouseEvent) => {
+  //     const target = e.target as Element;
+  //     
+  //     // Si el click no es en ningún elemento del menú O en el botón de toggle del tema O en el botón de idioma, deseleccionar
+  //     if (!target.closest('[data-menu-element]') && 
+  //         !target.closest('[aria-label="Toggle theme"]') && 
+  //         !target.closest('[aria-label="Toggle language"]')) {
+  //       if (showSub) {
+  //         // Si hay submenú abierto, cerrarlo suavemente
+  //         closeSubmenuSmoothly();
+  //       } else if (selectedMain > -1) {
+  //         // Si hay una selección pero no submenú, deseleccionar todo
+  //         setSelectedMain(-1);
+  //       }
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [selectedMain, showSub]);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, [selectedMain, showSub]);
 
   return (
     <div className="relative w-full min-h-[60vh] retro-grid scanlines pt-32 pb-12">
@@ -188,8 +191,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         <span>Navegar</span>
         <kbd className="px-2 py-1 bg-muted rounded border border-border">↑↓</kbd>
         <span>Seleccionar</span>
-        <kbd className="px-2 py-1 bg-muted rounded border border-border">Enter</kbd>
-        <span>Abrir</span>
+        <kbd className="px-2 py-1 bg-muted rounded border border-border">Enter/Space</kbd>
+        <span>Abrir/Cerrar</span>
       </div> */}
 
       {/* Menú principal horizontal - Centrado con flujo normal */}
@@ -215,15 +218,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 const isDoubleClick = now - lastClickTime < 300;
                 
                 if (isDoubleClick && selectedMain === index && items[index]?.subItems) {
-                  // Doble click: abrir submenú
-                  setShowSub(true);
+                  // Doble click: alternar submenú (abrir/cerrar)
+                  if (showSub) {
+                    // Si ya está abierto, cerrarlo suavemente
+                    closeSubmenuSmoothly();
+                  } else {
+                    // Si está cerrado, abrirlo
+                    setShowSub(true);
+                  }
                 } else {
                   // Click simple: solo seleccionar
                   setSelectedMain(index);
-                  if (showSub) {
-                    // Si había un submenú abierto, cerrarlo suavemente
-                    closeSubmenuSmoothly();
-                  }
+                  // Ya no cerramos automáticamente el submenú en click simple
                 }
                 
                 setLastClickTime(now);
