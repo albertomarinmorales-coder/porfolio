@@ -43,13 +43,58 @@ export function SynthWaveFooter() {
         mass: 2
       }}
     >
-      {/* Grid de fondo retro */}
-      <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#a855f7_1px,transparent_1px),linear-gradient(to_bottom,#a855f7_1px,transparent_1px)] bg-[size:40px_40px]" />
+      {/* Grid de fondo retro con efecto glitch */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Grid base púrpura */}
+        <motion.div
+          className="absolute inset-0 opacity-[0.15] bg-[linear-gradient(to_right,#a855f7_1px,transparent_1px),linear-gradient(to_bottom,#a855f7_1px,transparent_1px)] bg-size-[40px_40px]"
+          animate={{
+            opacity: [0.15, 0.15, 0.05, 0.15, 0.08, 0.15],
+          }}
+          transition={{
+            duration: 0.4,
+            repeat: Infinity,
+            repeatDelay: 4,
+            times: [0, 0.2, 0.3, 0.4, 0.6, 1],
+          }}
+        />
+        
+        {/* Grid glitch cyan */}
+        <motion.div
+          className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)] bg-size-[40px_40px]"
+          animate={{
+            opacity: [0, 0, 0.25, 0, 0.18, 0],
+            x: [0, 0, 3, 0, -2, 0],
+            scaleX: [1, 1, 1.005, 1, 0.995, 1],
+          }}
+          transition={{
+            duration: 0.4,
+            repeat: Infinity,
+            repeatDelay: 4,
+            times: [0, 0.2, 0.3, 0.4, 0.6, 1],
+          }}
+        />
+        
+        {/* Grid glitch rosa */}
+        <motion.div
+          className="absolute inset-0 bg-[linear-gradient(to_right,#ec4899_1px,transparent_1px),linear-gradient(to_bottom,#ec4899_1px,transparent_1px)] bg-size-[40px_40px]"
+          animate={{
+            opacity: [0, 0, 0.2, 0, 0.15, 0],
+            x: [0, 0, -3, 0, 2, 0],
+            scaleX: [1, 1, 0.995, 1, 1.005, 1],
+          }}
+          transition={{
+            duration: 0.4,
+            repeat: Infinity,
+            repeatDelay: 4,
+            delay: 0.03,
+            times: [0, 0.2, 0.3, 0.4, 0.6, 1],
+          }}
+        />
       </div>
 
       {/* Línea superior brillante */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary to-transparent opacity-50" />
 
       <div className="relative max-w-7xl mx-auto px-6 py-4">
         {/* Contenido principal del footer */}
@@ -60,13 +105,13 @@ export function SynthWaveFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="flex flex-col items-start justify-start space-y-2"
+            className="flex flex-col items-start md:items-center justify-start space-y-2"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mt-1">
+              <div className="w-8 h-8 bg-linear-to-br from-primary to-secondary rounded-lg flex items-center justify-center mt-1">
                 <Code2 className="w-5 h-5 text-background" />
               </div>
-              <h3 className="text-xl font-black bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+              <h3 className="text-xl font-black bg-linear-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
                 ALBERTO
               </h3>
             </div>
@@ -82,9 +127,9 @@ export function SynthWaveFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="space-y-2 flex flex-col items-start"
+            className="space-y-2 flex flex-col items-start md:items-center"
           >
-            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed text-left">
+            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed text-right">
               {t("footer.branding.tagline")}
             </p>
           </motion.div>
@@ -95,7 +140,7 @@ export function SynthWaveFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="space-y-2 flex flex-col items-start"
+            className="space-y-2 flex flex-col items-start md:items-center"
           >
             <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">
               {t("footer.connect.title")}
@@ -117,7 +162,7 @@ export function SynthWaveFooter() {
                     transition={{ delay: index * 0.1 }}
                   >
                     {/* Glow effect */}
-                    <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${social.color} opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300`} />
+                    <div className={`absolute inset-0 rounded-full bg-linear-to-r ${social.color} opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300`} />
                     
                     {/* Icon container */}
                     <div className="relative w-8 h-8 bg-background/50 backdrop-blur-sm border border-primary/30 rounded-full flex items-center justify-center group-hover:border-primary/60 transition-all duration-300">
