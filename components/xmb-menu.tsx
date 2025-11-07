@@ -355,6 +355,12 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                                 alt="Cart icon"
                                 className="w-8 h-8 object-contain"
                               />
+                            ) : subItem.id === 'project2' || subItem.title.includes('Social Dashboard') ? (
+                              <img
+                                src="/images/SD.svg"
+                                alt="Social Dashboard icon"
+                                className="w-8 h-8 object-contain"
+                              />
                             ) : (
                               <img
                                 src={subItem.image}

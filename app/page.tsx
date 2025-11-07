@@ -390,7 +390,8 @@ export default function Home() {
           id: "project2",
           title: t("projects.dashboard.title"),
           description: t("projects.dashboard.description"),
-          image: "/projects/dashboard.png",
+          image: "/images/Social-Dashboard.png",
+          link: "https://social-dashboard-ruddy.vercel.app/",
         },
         {
           id: "project3",
