@@ -54,6 +54,10 @@ export const translations = {
         title: "Fresh Market",
         description: "Plataforma de comercio electrónico completa con carrito de compras, pagos integrados y gestión de productos. Desarrollada con Next.js y Stripe."
       },
+      comidacasera: {
+        title: "Comida Casera",
+        description: "Tienda de comida casera con carrito de compras, gestión de pedidos y catálogo de productos. Desarrollo completo con Next.js y TypeScript."
+      },
       dashboard: {
         title: "Social Dashboard",
         description: "Dashboard de analytics en tiempo real con visualización de datos, gráficos interactivos y métricas de redes sociales. React y TypeScript."
@@ -174,6 +178,10 @@ export const translations = {
       ecommerce: {
         title: "Fresh Market", 
         description: "Complete e-commerce platform with shopping cart, integrated payments and product management. Built with Next.js and Stripe."
+      },
+      comidacasera: {
+        title: "Comida Casera",
+        description: "Homemade food store with shopping cart, order management and product catalog. Full development with Next.js and TypeScript."
       },
       dashboard: {
         title: "Social Dashboard",

@@ -50,6 +50,16 @@ export const portfolioConfig = {
     },
     {
       id: "project3",
+      title: "Comida Casera",
+      description: "Tienda de comida casera con carrito de compras y gestión de pedidos",
+      image: "/projects/comida-casera.png",
+      tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+      github: "https://github.com/albertomarinmorales-coder/comida-casera",
+      demo: "https://comida-casera.com",
+      featured: true,
+    },
+    {
+      id: "project4",
       title: "Social Dashboard",
       description: "Dashboard de analytics en tiempo real con React y TypeScript",
       image: "/projects/dashboard.png",
@@ -59,7 +69,7 @@ export const portfolioConfig = {
       featured: false,
     },
     {
-      id: "project4",
+      id: "project5",
       title: "Task Manager App",
       description: "Aplicación de gestión de tareas con drag & drop",
       image: "/projects/tasks.png",

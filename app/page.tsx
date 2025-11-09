@@ -388,19 +388,26 @@ export default function Home() {
         },
         {
           id: "project2",
+          title: t("projects.comidacasera.title"),
+          description: t("projects.comidacasera.description"),
+          image: "/images/comidaCover.png",
+          link: "https://tienda-comida-casera.vercel.app/",
+        },
+        {
+          id: "project3",
           title: t("projects.dashboard.title"),
           description: t("projects.dashboard.description"),
           image: "/images/Social-Dashboard.png",
           link: "https://social-dashboard-ruddy.vercel.app/",
         },
         {
-          id: "project3",
+          id: "project4",
           title: t("projects.taskmanager.title"),
           description: t("projects.taskmanager.description"),
           image: "/projects/tasks.png",
         },
         {
-          id: "project4",
+          id: "project5",
           title: t("projects.auth.title"),
           description: t("projects.auth.description"),
           image: "/projects/auth.png",
