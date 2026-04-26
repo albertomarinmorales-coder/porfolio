@@ -400,21 +400,26 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           className="mx-auto flex w-full min-w-0 max-w-6xl flex-col items-stretch gap-0 px-2 min-[400px]:px-3 sm:px-4 md:px-6"
           data-menu-element="submenu"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false} mode="wait">
             {showSub && selectedMain > -1 ? (
               <motion.div
                 key={`submenu-panel-${selectedMain}`}
-                className="flex w-full min-w-0 flex-col items-center gap-2"
-                initial={{ opacity: 0, y: 36, scale: 0.96, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                className="flex w-full min-w-0 flex-col items-center gap-2 overflow-hidden"
+                initial={{ opacity: 0, y: 36, scale: 0.96, filter: "blur(8px)", height: 0 }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)", height: "auto" }}
                 exit={{
                   opacity: 0,
                   y: 18,
                   scale: 0.98,
                   filter: "blur(6px)",
+                  height: 0,
                   transition: {
-                    duration: isClosing ? 0.55 : 0.28,
+                    duration: isClosing ? 0.55 : 0.32,
                     ease: [0.4, 0, 0.2, 1],
+                    height: {
+                      duration: isClosing ? 0.55 : 0.32,
+                      ease: [0.4, 0, 0.2, 1],
+                    },
                   },
                 }}
                 transition={{
@@ -422,6 +427,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                   scale: { ...subSpring, stiffness: 300 },
                   opacity: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
                   filter: { duration: 0.45 },
+                  height: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
                 }}
               >
                 <div className="mb-3 w-full min-w-0 sm:mb-4 lg:mb-5">
