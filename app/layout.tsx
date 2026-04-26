@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Rajdhani, Share_Tech_Mono } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { portfolioConfig } from "@/lib/config";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -22,7 +23,7 @@ const shareTechMono = Share_Tech_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ALBERTO | Web Developer",
+  title: `${portfolioConfig.personal.heroName} | ${portfolioConfig.personal.title}`,
   description: "Portfolio de Alberto - Desarrollador Web con experiencia en React, Next.js y tecnologías modernas",
   icons: '/favicon.svg',
 };

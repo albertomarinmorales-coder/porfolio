@@ -5,6 +5,8 @@ export const portfolioConfig = {
   // Información personal
   personal: {
     name: "Alberto",
+    /** Texto del título principal (hero, footer). Se muestra en mayúsculas en el header. */
+    heroName: "ALBERTOMARINDEV",
     title: "Web Developer",
     bio: "Desarrollador apasionado por crear experiencias web únicas con tecnologías modernas.",
     avatar: "/avatar.png", // Opcional

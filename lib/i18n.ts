@@ -69,6 +69,11 @@ export const translations = {
       auth: {
         title: "Authentication System",
         description: "Sistema completo de autenticación con registro, login, recuperación de contraseña y gestión de usuarios. JWT, bcrypt y middleware de seguridad."
+      },
+      brutalidadprimus: {
+        title: "Cicatrices de Primus",
+        description:
+          "Web temática para un servidor de rol: lore, secciones de campaña y recursos para jugadores. Hecha con React y Vite, encargo para la comunidad del server."
       }
     },
     // Resume section
@@ -194,6 +199,11 @@ export const translations = {
       auth: {
         title: "Authentication System",
         description: "Complete authentication system with registration, login, password recovery and user management. JWT, bcrypt and security middleware."
+      },
+      brutalidadprimus: {
+        title: "Cicatrices de Primus",
+        description:
+          "Themed site for a roleplay server: lore, campaign pages and player resources. Built with React and Vite as a project for the server community."
       }
     },
     // Resume section

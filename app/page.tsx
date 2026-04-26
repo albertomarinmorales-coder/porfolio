@@ -1,6 +1,7 @@
 "use client";
 
 import { XMBMenu, type MenuItem } from "@/components/xmb-menu";
+import { SynthwaveMainBackdrop } from "@/components/synthwave-main-backdrop";
 import { SynthWaveHeader } from "@/components/synthwave-header";
 import { SynthWaveFooter } from "@/components/synthwave-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -355,6 +356,10 @@ export default function Home() {
                       <span className="text-xs text-muted-foreground">Next.js, Stripe</span>
                     </div>
                     <div className="flex justify-between items-center">
+                      <span className="text-secondary">{t("projects.brutalidadprimus.title")}</span>
+                      <span className="text-xs text-muted-foreground">React, Vite</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span className="text-secondary">{t("projects.dashboard.title")}</span>
                       <span className="text-xs text-muted-foreground">React, Charts.js</span>
                     </div>
@@ -392,6 +397,14 @@ export default function Home() {
           description: t("projects.comidacasera.description"),
           image: "/images/comidaCover.png",
           link: "https://tienda-comida-casera.vercel.app/",
+        },
+        {
+          id: "project6",
+          title: t("projects.brutalidadprimus.title"),
+          description: t("projects.brutalidadprimus.description"),
+          image: "/images/hero1.png",
+          menuImage: "/images/avatar.png",
+          link: "https://cicatrices-de-primus.vercel.app/",
         },
         {
           id: "project3",
@@ -626,23 +639,28 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background dark relative flex flex-col">
-      <SynthWaveHeader />
-      <LanguageToggle />
-      <ThemeToggle />
-      <motion.div 
-        className="flex-1 flex items-center justify-center"
-        layout
-        transition={{
-          type: "spring",
-          stiffness: 120,
-          damping: 20,
-          mass: 2
-        }}
-      >
-        <XMBMenu items={menuItems} onSelect={handleSelect} />
-      </motion.div>
-      <SynthWaveFooter />
+    <main className="flex min-h-screen flex-col bg-background dark">
+      <div className="flex min-h-0 min-h-screen flex-1 flex-col">
+        <SynthWaveHeader />
+        <LanguageToggle />
+        <ThemeToggle />
+        <motion.div
+          className="relative flex min-h-0 flex-1 flex-col"
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 120,
+            damping: 20,
+            mass: 2
+          }}
+        >
+          <SynthwaveMainBackdrop />
+          <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center">
+            <XMBMenu items={menuItems} onSelect={handleSelect} />
+          </div>
+        </motion.div>
+        <SynthWaveFooter />
+      </div>
     </main>
   );
 }

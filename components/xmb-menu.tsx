@@ -17,6 +17,8 @@ export interface SubMenuItem {
   title: string;
   description?: string;
   image?: string;
+  /** Thumbnail in the sub-menu list only; `image` is still used for the detail card */
+  menuImage?: string;
   link?: string;
   content?: React.ReactNode;
   showScrollIndicator?: boolean;
@@ -27,12 +29,36 @@ interface XMBMenuProps {
   onSelect?: (mainId: string, subId?: string) => void;
 }
 
+const subSpring = {
+  type: "spring" as const,
+  stiffness: 340,
+  damping: 36,
+  mass: 0.9,
+};
+
+const subListVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05, delayChildren: 0.08 },
+  },
+};
+
+const subLineVariants = {
+  hidden: { opacity: 0, x: -12, filter: "blur(4px)" as const },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)" as const,
+    transition: { type: "spring" as const, stiffness: 420, damping: 32 },
+  },
+};
+
 export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const { t } = useLanguage();
   const [selectedMain, setSelectedMain] = useState(-1); // Sin selección inicial
   const [selectedSub, setSelectedSub] = useState(0);
   const [showSub, setShowSub] = useState(false);
-  const [lastClickTime, setLastClickTime] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
 
   // Función para cerrar el submenú con animación suave
@@ -156,9 +182,14 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         setShowSub(false);
         setSelectedSub(0);
       }
-      // Si tiene subItems, mantener el submenú abierto pero resetear la selección
     }
   }, [selectedMain, items, showSub]);
+
+  // Al cambiar de categoría principal, el sub-índice anterior puede quedar fuera de rango;
+  // además, sin remontar el panel, los nuevos motion.button con variants pueden quedar en opacity:0
+  useEffect(() => {
+    setSelectedSub(0);
+  }, [selectedMain]);
 
   // Comentado: Ya no cerramos el menú al hacer clic fuera
   // useEffect(() => {
@@ -182,6 +213,10 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   //   document.addEventListener("mousedown", handleClickOutside);
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // }, [selectedMain, showSub]);
+
+  const subItems = selectedMain > -1 ? (items[selectedMain]?.subItems ?? []) : [];
+  const safeSub = Math.max(0, Math.min(selectedSub, Math.max(0, subItems.length - 1)));
+  const currentSub = subItems[safeSub];
 
   return (
     <div className="relative w-full min-h-[60vh] retro-grid scanlines pt-32 pb-12">
@@ -214,25 +249,21 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
               key={item.id}
               data-menu-element="item"
               onClick={() => {
-                const now = Date.now();
-                const isDoubleClick = now - lastClickTime < 300;
-                
-                if (isDoubleClick && selectedMain === index && items[index]?.subItems) {
-                  // Doble click: alternar submenú (abrir/cerrar)
+                if (selectedMain === index && items[index]?.subItems) {
+                  // Mismo ítem: un clic alterna abrir / cerrar submenú
                   if (showSub) {
-                    // Si ya está abierto, cerrarlo suavemente
                     closeSubmenuSmoothly();
                   } else {
-                    // Si está cerrado, abrirlo
                     setShowSub(true);
                   }
                 } else {
-                  // Click simple: solo seleccionar
                   setSelectedMain(index);
-                  // Ya no cerramos automáticamente el submenú en click simple
+                  if (items[index]?.subItems) {
+                    setShowSub(true);
+                  } else {
+                    setShowSub(false);
+                  }
                 }
-                
-                setLastClickTime(now);
               }}
               className={`flex flex-col items-center gap-3 transition-all duration-300 focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
                 selectedMain === index
@@ -281,73 +312,85 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
         </button> */}
       </div>
 
-      {/* Sub-menú vertical - Flujo normal debajo del menú principal */}
-      {selectedMain > -1 && items[selectedMain]?.subItems && (
-        <motion.div 
-          className="flex flex-col items-center gap-4 w-full max-w-6xl mx-auto px-6"
+      {/* Sub-menú: un solo bloque animado (spring + stagger) */}
+      {selectedMain > -1 && subItems.length > 0 && (
+        <div
+          className="mx-auto flex w-full max-w-6xl flex-col items-center gap-0 px-6"
           data-menu-element="submenu"
-          layout
-          transition={{
-            duration: isClosing ? 0.8 : 0.4,
-            ease: isClosing ? "easeInOut" : "easeOut"
-          }}
         >
-          <AnimatePresence>
-            {showSub && selectedMain > -1 && (
-              <motion.button
-                data-menu-element="nav"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                transition={{ 
-                  duration: isClosing ? 0.8 : 0.3,
-                  ease: isClosing ? "easeInOut" : "easeOut"
+          <AnimatePresence mode="wait">
+            {showSub && selectedMain > -1 ? (
+              <motion.div
+                key={`submenu-panel-${selectedMain}`}
+                className="flex w-full flex-col items-center gap-2"
+                initial={{ opacity: 0, y: 36, scale: 0.96, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                exit={{
+                  opacity: 0,
+                  y: 18,
+                  scale: 0.98,
+                  filter: "blur(6px)",
+                  transition: {
+                    duration: isClosing ? 0.55 : 0.28,
+                    ease: [0.4, 0, 0.2, 1],
+                  },
                 }}
-                onClick={() =>
-                  setSelectedSub((prev) =>
-                    prev > 0 ? prev - 1 : (items[selectedMain].subItems?.length || 1) - 1
-                  )
-                }
-                className="text-muted-foreground hover:text-secondary transition-colors focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
+                transition={{
+                  y: subSpring,
+                  scale: { ...subSpring, stiffness: 300 },
+                  opacity: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
+                  filter: { duration: 0.45 },
+                }}
               >
-                <ChevronUp className="w-6 h-6" />
-              </motion.button>
-            )}
-          </AnimatePresence>
+                <motion.button
+                  data-menu-element="nav"
+                  type="button"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...subSpring, delay: 0.06 }}
+                  onClick={() =>
+                    setSelectedSub((prev) =>
+                      prev > 0 ? prev - 1 : (subItems.length || 1) - 1
+                    )
+                  }
+                  className="text-muted-foreground transition-colors hover:text-secondary focus:border-transparent focus:outline-none focus:ring-0 cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
+                >
+                  <ChevronUp className="h-6 w-6" />
+                </motion.button>
 
-          <div className="flex gap-8 w-full justify-center mb-8">
-            <AnimatePresence mode="wait">
-              {showSub ? (
-                <>
-                  {/* Lista de sub-items a la izquierda */}
+                <div className="mb-5 flex w-full max-w-6xl justify-center gap-6 sm:gap-8">
                   <motion.div
-                    key="submenu-list"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20, scale: 0.95 }}
-                    transition={{ 
-                      duration: isClosing ? 0.8 : 0.4, 
-                      ease: isClosing ? "easeInOut" : "easeOut" 
-                    }}
-                    className="flex flex-col gap-3 items-center w-80 p-6 max-h-[500px] overflow-y-auto scrollbar-hide"
+                    key={`submenu-list-${selectedMain}`}
+                    variants={subListVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="scrollbar-hide flex max-h-[500px] w-80 flex-col items-center gap-3 overflow-y-auto p-5"
                   >
-                    {items[selectedMain].subItems.map((subItem, index) => (
-                      <button
+                    {subItems.map((subItem, index) => (
+                      <motion.button
                         key={subItem.id}
                         data-menu-element="subitem"
+                        type="button"
+                        variants={subLineVariants}
                         onClick={() => {
                           setSelectedSub(index);
-                          onSelect?.(items[selectedMain].id, subItem.id);
+                          onSelect?.(items[selectedMain]!.id, subItem.id);
                         }}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-64 overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer ${
-                          selectedSub === index
-                            ? "bg-secondary/30 backdrop-blur-sm glow-secondary scale-105 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] border border-secondary/20"
-                            : "bg-background/85 backdrop-blur-sm border border-border/50 opacity-60 hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30"
+                        className={`flex w-64 cursor-pointer items-center gap-3 overflow-hidden rounded-xl px-4 py-3 transition-all duration-300 focus:border-transparent focus:outline-none focus:ring-0 ${
+                          safeSub === index
+                            ? "glow-secondary scale-105 border border-secondary/20 bg-secondary/30 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm"
+                            : "border border-border/50 bg-background/85 opacity-60 backdrop-blur-sm hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30"
                         }`}
                       >
-                        {subItem.image && (
+                        {(subItem.menuImage || subItem.image) && (
                           <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden flex items-center justify-center">
-                            {subItem.image.startsWith('/projects/') ? (
+                            {subItem.menuImage ? (
+                              <img
+                                src={subItem.menuImage}
+                                alt=""
+                                className="max-h-12 max-w-12 w-full h-full object-contain"
+                              />
+                            ) : subItem.image?.startsWith('/projects/') ? (
                               <Wrench className="w-4 h-4 text-muted-foreground" />
                             ) : subItem.id === 'project1' || subItem.title.includes('Fresh Market') ? (
                               <img
@@ -369,7 +412,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                               />
                             ) : (
                               <img
-                                src={subItem.image}
+                                src={subItem.image!}
                                 alt={subItem.title}
                                 className="w-full h-full object-cover"
                               />
@@ -378,37 +421,31 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         )}
                         <h3
                           className={`font-medium text-base text-left ${
-                            selectedSub === index ? "text-secondary" : "text-foreground"
+                            safeSub === index ? "text-secondary" : "text-foreground"
                           }`}
                         >
                           {subItem.title}
                         </h3>
-                      </button>
+                      </motion.button>
                     ))}
                   </motion.div>
 
-                  {/* Panel de detalles a la derecha */}
                   <motion.div
-                    key={`detail-${selectedSub}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20, scale: 0.95 }}
-                    transition={{ 
-                      duration: isClosing ? 0.8 : 0.3,
-                      ease: isClosing ? "easeInOut" : "easeOut"
-                    }}
-                    className="flex flex-col gap-4 p-6 rounded-2xl bg-background/90 backdrop-blur-sm border border-primary/30 shadow-lg max-w-lg min-w-[500px] max-h-[500px] overflow-y-auto"
+                    key={currentSub.id}
+                    initial={{ opacity: 0, x: 24, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: 12, filter: "blur(4px)" }}
+                    transition={subSpring}
+                    className="border-primary/30 bg-background/92 flex max-h-[500px] min-w-[min(100%,500px)] max-w-lg flex-col gap-4 overflow-y-auto rounded-2xl border p-6 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md"
                   >
                     <h2 className="text-2xl font-bold text-primary">
-                      {items[selectedMain].subItems[selectedSub].title}
+                      {currentSub.title}
                     </h2>
                     
-                    {/* Si hay contenido personalizado, mostrarlo */}
-                    {items[selectedMain].subItems[selectedSub].content ? (
+                    {currentSub.content ? (
                       <>
-                        {items[selectedMain].subItems[selectedSub].content}
-                        {/* Indicador de scroll si está habilitado */}
-                        {items[selectedMain].subItems[selectedSub].showScrollIndicator && (
+                        {currentSub.content}
+                        {currentSub.showScrollIndicator && (
                           <div className="flex justify-center mt-3 pointer-events-none" style={{ animation: 'none' }}>
                             <div className="flex items-center gap-2 text-primary/90 text-xs bg-background/30 backdrop-blur-sm px-3 py-1 rounded-full border border-primary/30 shadow-lg" style={{ animation: 'none', transform: 'none' }}>
                               <span>{t("common.scrollMore")}</span>
@@ -421,34 +458,34 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                       </>
                     ) : (
                       <>
-                        {items[selectedMain].subItems[selectedSub].description && (
+                        {currentSub.description && (
                           <p className="text-muted-foreground leading-relaxed">
-                            {items[selectedMain].subItems[selectedSub].description}
+                            {currentSub.description}
                           </p>
                         )}
-                        {items[selectedMain].subItems[selectedSub].image && (
-                          <div className="rounded-lg overflow-hidden">
-                            {items[selectedMain].subItems[selectedSub].image.startsWith('/projects/') ? (
+                        {currentSub.image && (
+                          <div className="mt-10 rounded-lg overflow-hidden">
+                            {currentSub.image.startsWith('/projects/') ? (
                               <div className="bg-muted p-8 flex items-center justify-center">
                                 <Wrench className="w-16 h-16 text-muted-foreground" />
                               </div>
-                            ) : items[selectedMain].subItems[selectedSub].link ? (
+                            ) : currentSub.link ? (
                               <a 
-                                href={items[selectedMain].subItems[selectedSub].link}
+                                href={currentSub.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block cursor-pointer hover:opacity-80 transition-opacity"
                               >
                                 <img
-                                  src={items[selectedMain].subItems[selectedSub].image}
-                                  alt={items[selectedMain].subItems[selectedSub].title}
+                                  src={currentSub.image}
+                                  alt={currentSub.title}
                                   className="w-full h-auto object-cover"
                                 />
                               </a>
                             ) : (
                               <img
-                                src={items[selectedMain].subItems[selectedSub].image}
-                                alt={items[selectedMain].subItems[selectedSub].title}
+                                src={currentSub.image}
+                                alt={currentSub.title}
                                 className="w-full h-auto object-cover"
                               />
                             )}
@@ -457,48 +494,27 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                       </>
                     )}
                   </motion.div>
-                </>
-              ) : (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ 
-                    duration: isClosing ? 0.8 : 0.3,
-                    ease: isClosing ? "easeInOut" : "easeOut"
-                  }}
-                  className="text-center text-muted-foreground p-8"
-                >
-                  <p className="text-sm">← → ↑ ↓ {t("common.navigation")}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                </div>
 
-          <AnimatePresence>
-            {showSub && selectedMain > -1 && (
-              <motion.button
-                data-menu-element="nav"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                transition={{ 
-                  duration: isClosing ? 0.8 : 0.3,
-                  ease: isClosing ? "easeInOut" : "easeOut"
-                }}
-                onClick={() =>
-                  setSelectedSub((prev) =>
-                    prev < (items[selectedMain].subItems?.length || 1) - 1 ? prev + 1 : 0
-                  )
-                }
-                className="text-muted-foreground hover:text-secondary transition-colors focus:outline-none focus:ring-0 focus:border-transparent cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
-              >
-                <ChevronDown className="w-6 h-6" />
-              </motion.button>
-            )}
+                <motion.button
+                  data-menu-element="nav"
+                  type="button"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...subSpring, delay: 0.08 }}
+                  onClick={() =>
+                    setSelectedSub((prev) =>
+                      prev < (subItems.length || 1) - 1 ? prev + 1 : 0
+                    )
+                  }
+                  className="text-muted-foreground transition-colors hover:text-secondary focus:border-transparent focus:outline-none focus:ring-0 cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
+                >
+                  <ChevronDown className="h-6 w-6" />
+                </motion.button>
+              </motion.div>
+            ) : null}
           </AnimatePresence>
-        </motion.div>
+        </div>
       )}
     </div>
   );

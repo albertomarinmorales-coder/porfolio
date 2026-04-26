@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, Code2, Zap } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { portfolioConfig } from "@/lib/config";
 
 export function SynthWaveFooter() {
   const { t } = useLanguage();
@@ -99,7 +100,7 @@ export function SynthWaveFooter() {
       <div className="relative max-w-7xl mx-auto px-6 py-4">
         {/* Contenido principal del footer */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 max-w-5xl mx-auto">
-          {/* Columna 1: Logo ALBERTO */}
+          {/* Columna 1: Logo / marca */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -111,8 +112,8 @@ export function SynthWaveFooter() {
               <div className="w-8 h-8 bg-linear-to-br from-primary to-secondary rounded-lg flex items-center justify-center mt-1">
                 <Code2 className="w-5 h-5 text-background" />
               </div>
-              <h3 className="text-xl font-black bg-linear-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                ALBERTO
+              <h3 className="font-hero text-xl font-semibold tracking-tight hero-title-gradient">
+                {portfolioConfig.personal.heroName}
               </h3>
             </div>
             <div className="flex items-center gap-2 text-xs text-primary/80">
