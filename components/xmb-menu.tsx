@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, LucideIcon, Wrench } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { LucideIcon, Wrench, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -37,22 +37,38 @@ const subSpring = {
 };
 
 const subListVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 6 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.05, delayChildren: 0.08 },
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 380, damping: 34 },
   },
 };
 
-const subLineVariants = {
-  hidden: { opacity: 0, x: -12, filter: "blur(4px)" as const },
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: "blur(0px)" as const,
-    transition: { type: "spring" as const, stiffness: 420, damping: 32 },
-  },
-};
+function SubItemThumb({ subItem }: { subItem: SubMenuItem }) {
+  if (!subItem.menuImage && !subItem.image) return null;
+  return (
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-muted">
+      {subItem.menuImage ? (
+        <img
+          src={subItem.menuImage}
+          alt=""
+          className="max-h-12 max-w-12 w-full h-full object-contain"
+        />
+      ) : subItem.image?.startsWith("/projects/") ? (
+        <Wrench className="h-4 w-4 text-muted-foreground" />
+      ) : subItem.id === "project1" || subItem.title.includes("Fresh Market") ? (
+        <img src="/images/cart-favicon.svg" alt="" className="h-8 w-8 object-contain" />
+      ) : subItem.id === "project2" || subItem.title.includes("Comida Casera") ? (
+        <img src="/projects/pollo-icono.png" alt="" className="h-8 w-8 object-contain" />
+      ) : subItem.id === "project3" || subItem.title.includes("Social Dashboard") ? (
+        <img src="/images/SD.svg" alt="" className="h-8 w-8 object-contain" />
+      ) : (
+        <img src={subItem.image!} alt="" className="h-full w-full object-cover" />
+      )}
+    </div>
+  );
+}
 
 export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const { t } = useLanguage();
@@ -60,6 +76,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const [selectedSub, setSelectedSub] = useState(0);
   const [showSub, setShowSub] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [subPickerOpen, setSubPickerOpen] = useState(false);
+  const subPickerRef = useRef<HTMLDivElement>(null);
 
   // Función para cerrar el submenú con animación suave
   const closeSubmenuSmoothly = () => {
@@ -159,11 +177,13 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           break;
         case "Escape":
           e.preventDefault();
+          if (subPickerOpen) {
+            setSubPickerOpen(false);
+            break;
+          }
           if (showSub) {
-            // Si hay submenú abierto, cerrarlo suavemente
             closeSubmenuSmoothly();
           } else if (selectedMain > -1) {
-            // Si hay una selección pero no submenú, deseleccionar todo
             setSelectedMain(-1);
           }
           break;
@@ -172,7 +192,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedMain, selectedSub, showSub, items, onSelect]);
+  }, [selectedMain, selectedSub, showSub, subPickerOpen, items, onSelect]);
 
   // Manejar automáticamente el estado del submenú cuando cambia la selección principal
   useEffect(() => {
@@ -190,6 +210,34 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   useEffect(() => {
     setSelectedSub(0);
   }, [selectedMain]);
+
+  useEffect(() => {
+    setSubPickerOpen(false);
+  }, [selectedMain, showSub]);
+
+  useEffect(() => {
+    if (!subPickerOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (subPickerRef.current && !subPickerRef.current.contains(e.target as Node)) {
+        setSubPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [subPickerOpen]);
+
+  // En viewport estrecho, al abrir el submenú llevar el bloque al área visible (evita quedar fuera de pantalla)
+  useEffect(() => {
+    if (!showSub || typeof window === "undefined") return;
+    if (window.innerWidth >= 1024) return;
+    const id = requestAnimationFrame(() => {
+      document.querySelector("[data-menu-element='submenu']")?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [showSub, selectedMain]);
 
   // Comentado: Ya no cerramos el menú al hacer clic fuera
   // useEffect(() => {
@@ -219,7 +267,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const currentSub = subItems[safeSub];
 
   return (
-    <div className="relative w-full min-h-[60vh] retro-grid scanlines pt-32 pb-12">
+    <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden retro-grid scanlines pt-20 pb-8 sm:min-h-[60vh] sm:pt-28 md:pt-32 md:pb-12">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
@@ -231,8 +279,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       </div> */}
 
       {/* Menú principal horizontal - Centrado con flujo normal */}
-      <div 
-        className="flex items-center justify-center gap-12 mb-12"
+      <div
+        className="mb-6 flex max-w-full flex-col items-center justify-center gap-4 px-1 sm:mb-10 sm:gap-6 md:mb-12 md:gap-8 lg:gap-12"
         data-menu-element="main"
       >
         {/* Botón izquierda oculto */}
@@ -243,7 +291,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           <ChevronLeft className="w-8 h-8" />
         </button> */}
 
-        <div className="flex gap-8">
+        <div className="flex max-w-full flex-wrap justify-center gap-3 [overflow-wrap:anywhere] min-[400px]:gap-4 sm:gap-6 md:gap-8">
           {items.map((item, index) => (
             <button
               key={item.id}
@@ -274,22 +322,22 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
               }`}
             >
               <div
-                className={`w-28 h-28 rounded-xl flex items-center justify-center transition-all duration-300 z-1 ${
+                className={`z-1 flex h-20 w-20 shrink-0 items-center justify-center rounded-lg transition-all duration-300 sm:h-24 sm:w-24 sm:rounded-xl md:h-28 md:w-28 ${
                   selectedMain === index
-                    ? "bg-primary/30 backdrop-blur-sm glow-border text-primary shadow-[0_0_15px_#06bdba,0_0_8px_#06bdba] border border-primary/20"
+                    ? "bg-primary/30 backdrop-blur-sm glow-border text-primary border border-primary/20 shadow-[0_0_15px_#06bdba,0_0_8px_#06bdba]"
                     : selectedMain === -1
-                      ? "bg-gray-100 dark:bg-gray-800 text-muted-foreground border border-border hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30" // Fondo gris claro sólido
-                      : "bg-gray-100 dark:bg-gray-800 text-muted-foreground border border-border hover:shadow-[0_0_8px_#06bdba] hover:shadow-primary/30"
+                      ? "border border-border bg-gray-100 text-muted-foreground hover:shadow-primary/30 hover:shadow-[0_0_8px_#06bdba] dark:bg-gray-800" // Fondo gris claro sólido
+                      : "border border-border bg-gray-100 text-muted-foreground hover:shadow-primary/30 hover:shadow-[0_0_8px_#06bdba] dark:bg-gray-800"
                 }`}
               >
                 {item.icon ? (
-                  <item.icon className="w-14 h-14" strokeWidth={1.5} />
+                  <item.icon className="h-9 w-9 sm:h-12 sm:w-12 md:h-14 md:w-14" strokeWidth={1.5} />
                 ) : (
-                  <div className="w-14 h-14" />
+                  <div className="h-9 w-9 sm:h-12 sm:w-12" />
                 )}
               </div>
               <span
-                className={`text-base font-medium transition-all duration-300 ${
+                className={`max-w-[5.5rem] text-center text-[0.7rem] font-medium leading-tight transition-all duration-300 min-[400px]:max-w-[6.5rem] min-[400px]:text-xs sm:max-w-none sm:text-sm md:text-base ${
                   selectedMain === index
                     ? "text-foreground glow-text"
                     : selectedMain === -1
@@ -315,14 +363,14 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
       {/* Sub-menú: un solo bloque animado (spring + stagger) */}
       {selectedMain > -1 && subItems.length > 0 && (
         <div
-          className="mx-auto flex w-full max-w-6xl flex-col items-center gap-0 px-6"
+          className="mx-auto flex w-full min-w-0 max-w-6xl flex-col items-stretch gap-0 px-2 min-[400px]:px-3 sm:px-4 md:px-6"
           data-menu-element="submenu"
         >
           <AnimatePresence mode="wait">
             {showSub && selectedMain > -1 ? (
               <motion.div
                 key={`submenu-panel-${selectedMain}`}
-                className="flex w-full flex-col items-center gap-2"
+                className="flex w-full min-w-0 flex-col items-center gap-2"
                 initial={{ opacity: 0, y: 36, scale: 0.96, filter: "blur(8px)" }}
                 animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                 exit={{
@@ -342,93 +390,94 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                   filter: { duration: 0.45 },
                 }}
               >
-                <motion.button
-                  data-menu-element="nav"
-                  type="button"
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...subSpring, delay: 0.06 }}
-                  onClick={() =>
-                    setSelectedSub((prev) =>
-                      prev > 0 ? prev - 1 : (subItems.length || 1) - 1
-                    )
-                  }
-                  className="text-muted-foreground transition-colors hover:text-secondary focus:border-transparent focus:outline-none focus:ring-0 cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
-                >
-                  <ChevronUp className="h-6 w-6" />
-                </motion.button>
-
-                <div className="mb-5 flex w-full max-w-6xl justify-center gap-6 sm:gap-8">
-                  <motion.div
-                    key={`submenu-list-${selectedMain}`}
-                    variants={subListVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="scrollbar-hide flex max-h-[500px] w-80 flex-col items-center gap-3 overflow-y-auto p-5"
-                  >
-                    {subItems.map((subItem, index) => (
-                      <motion.button
-                        key={subItem.id}
-                        data-menu-element="subitem"
-                        type="button"
-                        variants={subLineVariants}
-                        onClick={() => {
-                          setSelectedSub(index);
-                          onSelect?.(items[selectedMain]!.id, subItem.id);
-                        }}
-                        className={`flex w-64 cursor-pointer items-center gap-3 overflow-hidden rounded-xl px-4 py-3 transition-all duration-300 focus:border-transparent focus:outline-none focus:ring-0 ${
-                          safeSub === index
-                            ? "glow-secondary scale-105 border border-secondary/20 bg-secondary/30 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm"
-                            : "border border-border/50 bg-background/85 opacity-60 backdrop-blur-sm hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30"
-                        }`}
-                      >
-                        {(subItem.menuImage || subItem.image) && (
-                          <div className="w-12 h-12 rounded-md bg-muted shrink-0 overflow-hidden flex items-center justify-center">
-                            {subItem.menuImage ? (
-                              <img
-                                src={subItem.menuImage}
-                                alt=""
-                                className="max-h-12 max-w-12 w-full h-full object-contain"
+                <div className="mb-3 w-full min-w-0 sm:mb-4 lg:mb-5">
+                  <div className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 xl:gap-8">
+                    <motion.div
+                      key={`submenu-list-${selectedMain}`}
+                      data-menu-element="subitem"
+                      variants={subListVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="w-full min-w-0 max-w-lg justify-self-stretch"
+                    >
+                      {subItems.length > 0 && (() => {
+                        const hasMore = subItems.length > 1;
+                        const current = subItems[safeSub]!;
+                        if (!hasMore) {
+                          return (
+                            <div
+                              className="glow-secondary flex w-full min-w-0 min-h-[52px] items-center gap-2.5 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/30 px-3 py-2.5 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm sm:px-4"
+                              data-menu-element="subitem"
+                            >
+                              {(current.menuImage || current.image) && <SubItemThumb subItem={current} />}
+                              <span className="min-w-0 flex-1 break-words text-sm font-medium text-secondary min-[400px]:text-base">
+                                {current.title}
+                              </span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div ref={subPickerRef} className="relative w-full min-w-0" data-menu-element="subitem">
+                            <button
+                              type="button"
+                              onClick={() => setSubPickerOpen((o) => !o)}
+                              aria-expanded={subPickerOpen}
+                              aria-haspopup="listbox"
+                              className="glow-secondary flex w-full min-w-0 min-h-[52px] items-center justify-between gap-2 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/30 px-3 py-2.5 text-left shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm transition-shadow hover:shadow-[0_0_10px_#c485ff] sm:px-4"
+                            >
+                              <span className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+                                {(current.menuImage || current.image) && <SubItemThumb subItem={current} />}
+                                <span className="min-w-0 flex-1 break-words text-sm font-medium text-secondary min-[400px]:text-base">
+                                  {current.title}
+                                </span>
+                              </span>
+                              <ChevronDown
+                                className={`h-5 w-5 shrink-0 text-secondary transition-transform duration-200 ${
+                                  subPickerOpen ? "rotate-180" : ""
+                                }`}
+                                aria-hidden
                               />
-                            ) : subItem.image?.startsWith('/projects/') ? (
-                              <Wrench className="w-4 h-4 text-muted-foreground" />
-                            ) : subItem.id === 'project1' || subItem.title.includes('Fresh Market') ? (
-                              <img
-                                src="/images/cart-favicon.svg"
-                                alt="Cart icon"
-                                className="w-8 h-8 object-contain"
-                              />
-                            ) : subItem.id === 'project2' || subItem.title.includes('Comida Casera') ? (
-                              <img
-                                src="/projects/pollo-icono.png"
-                                alt="Comida Casera icon"
-                                className="w-8 h-8 object-contain"
-                              />
-                            ) : subItem.id === 'project3' || subItem.title.includes('Social Dashboard') ? (
-                              <img
-                                src="/images/SD.svg"
-                                alt="Social Dashboard icon"
-                                className="w-8 h-8 object-contain"
-                              />
-                            ) : (
-                              <img
-                                src={subItem.image!}
-                                alt={subItem.title}
-                                className="w-full h-full object-cover"
-                              />
-                            )}
+                            </button>
+                            <AnimatePresence>
+                              {subPickerOpen && (
+                                <motion.ul
+                                  role="listbox"
+                                  initial={{ opacity: 0, y: -6 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -4 }}
+                                  transition={subSpring}
+                                  className="border-primary/30 absolute left-0 right-0 z-30 mt-1.5 max-h-[min(50vh,320px)] list-none space-y-0 overflow-y-auto rounded-xl border bg-background/95 p-1 shadow-[0_12px_40px_-10px_rgba(0,0,0,0.35)] backdrop-blur-md dark:bg-background/98"
+                                >
+                                  {subItems.map((s, i) => (
+                                    <li key={s.id} role="none" className="p-0">
+                                      <button
+                                        type="button"
+                                        role="option"
+                                        aria-selected={safeSub === i}
+                                        onClick={() => {
+                                          setSelectedSub(i);
+                                          onSelect?.(items[selectedMain]!.id, s.id);
+                                          setSubPickerOpen(false);
+                                        }}
+                                        className={
+                                          "flex w-full min-w-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm min-[400px]:text-base " +
+                                          (safeSub === i
+                                            ? "bg-secondary/25 font-medium text-secondary"
+                                            : "text-foreground hover:bg-primary/10")
+                                        }
+                                      >
+                                        {(s.menuImage || s.image) && <SubItemThumb subItem={s} />}
+                                        <span className="min-w-0 break-words">{s.title}</span>
+                                      </button>
+                                    </li>
+                                  ))}
+                                </motion.ul>
+                              )}
+                            </AnimatePresence>
                           </div>
-                        )}
-                        <h3
-                          className={`font-medium text-base text-left ${
-                            safeSub === index ? "text-secondary" : "text-foreground"
-                          }`}
-                        >
-                          {subItem.title}
-                        </h3>
-                      </motion.button>
-                    ))}
-                  </motion.div>
+                        );
+                      })()}
+                    </motion.div>
 
                   <motion.div
                     key={currentSub.id}
@@ -436,9 +485,9 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                     exit={{ opacity: 0, x: 12, filter: "blur(4px)" }}
                     transition={subSpring}
-                    className="border-primary/30 bg-background/92 flex max-h-[500px] min-w-[min(100%,500px)] max-w-lg flex-col gap-4 overflow-y-auto rounded-2xl border p-6 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md"
+                    className="border-primary/30 bg-background/92 flex w-full min-w-0 max-w-lg flex-1 flex-col gap-3 overflow-y-auto rounded-xl border p-4 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md min-[400px]:gap-4 min-[400px]:rounded-2xl min-[400px]:p-5 sm:max-h-[500px] sm:p-6 lg:min-h-0"
                   >
-                    <h2 className="text-2xl font-bold text-primary">
+                    <h2 className="text-balance break-words text-lg font-bold text-primary min-[400px]:text-xl sm:text-2xl">
                       {currentSub.title}
                     </h2>
                     
@@ -459,12 +508,12 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     ) : (
                       <>
                         {currentSub.description && (
-                          <p className="text-muted-foreground leading-relaxed">
+                          <p className="text-sm text-muted-foreground leading-relaxed min-[400px]:text-base">
                             {currentSub.description}
                           </p>
                         )}
                         {currentSub.image && (
-                          <div className="mt-10 rounded-lg overflow-hidden">
+                          <div className="mt-2 rounded-lg overflow-hidden min-[400px]:mt-3 sm:mt-4">
                             {currentSub.image.startsWith('/projects/') ? (
                               <div className="bg-muted p-8 flex items-center justify-center">
                                 <Wrench className="w-16 h-16 text-muted-foreground" />
@@ -494,23 +543,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                       </>
                     )}
                   </motion.div>
+                  </div>
                 </div>
-
-                <motion.button
-                  data-menu-element="nav"
-                  type="button"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...subSpring, delay: 0.08 }}
-                  onClick={() =>
-                    setSelectedSub((prev) =>
-                      prev < (subItems.length || 1) - 1 ? prev + 1 : 0
-                    )
-                  }
-                  className="text-muted-foreground transition-colors hover:text-secondary focus:border-transparent focus:outline-none focus:ring-0 cursor-pointer hover:drop-shadow-[0_0_8px_#c485ff]"
-                >
-                  <ChevronDown className="h-6 w-6" />
-                </motion.button>
               </motion.div>
             ) : null}
           </AnimatePresence>

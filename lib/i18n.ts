@@ -107,7 +107,9 @@ export const translations = {
     // Common
     common: {
       scrollMore: "Desliza para ver más",
-      navigation: "para moverte • Enter/Space para abrir o cerrar"
+      navigation: "para moverte • Enter/Space para abrir o cerrar",
+      submenuMore: "Más secciones del menú",
+      submenuSelectPlaceholder: "Elegir otra sección…"
     },
     // Footer
     footer: {
@@ -237,7 +239,9 @@ export const translations = {
     // Common
     common: {
       scrollMore: "Scroll to see more",
-      navigation: "to navigate • Enter/Space to open or close"
+      navigation: "to navigate • Enter/Space to open or close",
+      submenuMore: "More menu sections",
+      submenuSelectPlaceholder: "Choose another section…"
     },
     // Footer
     footer: {

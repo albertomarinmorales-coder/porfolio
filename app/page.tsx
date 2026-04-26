@@ -6,6 +6,7 @@ import { SynthWaveHeader } from "@/components/synthwave-header";
 import { SynthWaveFooter } from "@/components/synthwave-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { MobileTogglesDock } from "@/components/mobile-toggles-dock";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { User, Gamepad2, FileText, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -642,8 +643,9 @@ export default function Home() {
     <main className="flex min-h-screen flex-col bg-background dark">
       <div className="flex min-h-0 min-h-screen flex-1 flex-col">
         <SynthWaveHeader />
-        <LanguageToggle />
-        <ThemeToggle />
+        <LanguageToggle className="hidden md:block" />
+        <ThemeToggle className="hidden md:block" />
+        <MobileTogglesDock />
         <motion.div
           className="relative flex min-h-0 flex-1 flex-col"
           layout
@@ -655,7 +657,7 @@ export default function Home() {
           }}
         >
           <SynthwaveMainBackdrop />
-          <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center">
+          <div className="relative z-10 flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-x-hidden px-0">
             <XMBMenu items={menuItems} onSelect={handleSelect} />
           </div>
         </motion.div>

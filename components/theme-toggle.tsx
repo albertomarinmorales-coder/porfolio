@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string } = {}) {
   const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -86,7 +87,10 @@ export function ThemeToggle() {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 p-3 rounded-lg bg-background/80 backdrop-blur-sm border border-primary/20 glow-border hover:border-primary/40 transition-colors"
+      className={cn(
+        "fixed top-6 right-6 z-50 rounded-lg border border-primary/20 bg-background/80 p-3 glow-border transition-colors hover:border-primary/40",
+        className
+      )}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle theme"

@@ -3,8 +3,9 @@
 import { Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
-export function LanguageToggle() {
+export function LanguageToggle({ className }: { className?: string } = {}) {
   const { language, setLanguage } = useLanguage();
 
   const toggleLanguage = () => {
@@ -15,7 +16,10 @@ export function LanguageToggle() {
   return (
     <motion.button
       onClick={toggleLanguage}
-      className="fixed top-6 right-20 z-50 p-3 rounded-lg bg-background/80 backdrop-blur-sm border border-primary/20 glow-border hover:border-primary/40 transition-colors"
+      className={cn(
+        "fixed top-6 right-20 z-50 rounded-lg border border-primary/20 bg-background/80 p-3 glow-border transition-colors hover:border-primary/40",
+        className
+      )}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle language"
