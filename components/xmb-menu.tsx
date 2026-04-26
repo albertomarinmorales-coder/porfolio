@@ -300,7 +300,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const currentSub = subItems[safeSub];
 
   return (
-    <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden retro-grid scanlines pt-20 pb-8 sm:min-h-[60vh] sm:pt-28 md:pt-32 md:pb-12">
+    <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden pt-20 pb-8 sm:min-h-[60vh] sm:pt-28 md:pt-32 md:pb-12">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
