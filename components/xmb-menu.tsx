@@ -298,6 +298,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const subItems = selectedMain > -1 ? (items[selectedMain]?.subItems ?? []) : [];
   const safeSub = Math.max(0, Math.min(selectedSub, Math.max(0, subItems.length - 1)));
   const currentSub = subItems[safeSub];
+  const hasMultipleSubItems = subItems.length > 1;
 
   return (
     <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden pt-20 pb-8 sm:min-h-[60vh] sm:pt-28 md:pt-32 md:pb-12">
@@ -424,7 +425,15 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 }}
               >
                 <div className="mb-3 w-full min-w-0 sm:mb-4 lg:mb-5">
-                  <div className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-4 lg:flex-row lg:items-stretch lg:justify-center lg:gap-6">
+                  <div
+                    className={
+                      "mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-4 " +
+                      (hasMultipleSubItems
+                        ? "lg:flex-row lg:items-stretch lg:justify-center lg:gap-6"
+                        : "items-center justify-center")
+                    }
+                  >
+                    {hasMultipleSubItems && (
                     <motion.div
                       key={`submenu-list-${selectedMain}`}
                       data-menu-element="subitem"
@@ -433,23 +442,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                       animate="visible"
                       className="w-full min-w-0 max-w-lg shrink-0 lg:max-w-[20rem] lg:basis-80 lg:flex lg:justify-start"
                     >
-                      {subItems.length > 0 && (() => {
-                        const hasMore = subItems.length > 1;
+                      {(() => {
                         const current = subItems[safeSub]!;
-
-                        if (!hasMore) {
-                          return (
-                            <div
-                              className="glow-secondary flex w-full min-w-0 min-h-[52px] items-center gap-2.5 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/30 px-3 py-2.5 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm sm:px-4"
-                              data-menu-element="subitem"
-                            >
-                              {(current.menuImage || current.image) && <SubItemThumb subItem={current} />}
-                              <span className="min-w-0 flex-1 break-words text-sm font-medium text-secondary min-[400px]:text-base">
-                                {current.title}
-                              </span>
-                            </div>
-                          );
-                        }
 
                         if (!isMobileSubmenu) {
                           return (
@@ -553,14 +547,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                         );
                       })()}
                     </motion.div>
+                    )}
 
                   <motion.div
                     key={currentSub.id}
-                    initial={{ opacity: 0, x: 24, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: 12, filter: "blur(4px)" }}
+                    initial={{ opacity: 0, x: hasMultipleSubItems ? 24 : 0, y: hasMultipleSubItems ? 0 : 16, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: hasMultipleSubItems ? 12 : 0, y: hasMultipleSubItems ? 0 : 8, filter: "blur(4px)" }}
                     transition={subSpring}
-                    className="border-primary/30 bg-background/92 flex w-full min-w-0 max-w-lg shrink-0 flex-col gap-3 overflow-y-auto rounded-xl border p-4 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md min-[400px]:gap-4 min-[400px]:rounded-2xl min-[400px]:p-5 sm:max-h-[500px] sm:p-6 lg:min-h-0 lg:min-w-0"
+                    className={
+                      "border-primary/30 bg-background/92 flex w-full min-w-0 shrink-0 flex-col gap-3 overflow-y-auto rounded-xl border p-4 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md min-[400px]:gap-4 min-[400px]:rounded-2xl min-[400px]:p-5 sm:max-h-[500px] sm:p-6 lg:min-h-0 lg:min-w-0 " +
+                      (hasMultipleSubItems ? "max-w-lg" : "max-w-2xl mx-auto")
+                    }
                   >
                     <h2 className="text-balance break-words text-lg font-bold text-primary min-[400px]:text-xl sm:text-2xl">
                       {currentSub.title}
