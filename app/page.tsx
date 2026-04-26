@@ -657,7 +657,7 @@ export default function Home() {
           }}
         >
           <SynthwaveMainBackdrop />
-          <div className="relative z-10 flex min-h-0 w-full min-w-0 max-w-full flex-1 items-center justify-center overflow-x-clip px-3 min-[400px]:px-4 sm:px-5 md:px-6">
+          <div className="relative z-10 flex min-h-0 w-full min-w-0 max-w-full flex-1 items-center justify-center overflow-x-clip px-3 min-[400px]:px-4 sm:px-5 md:px-6 -translate-y-2 sm:-translate-y-3">
             <XMBMenu items={menuItems} onSelect={handleSelect} />
           </div>
         </motion.div>

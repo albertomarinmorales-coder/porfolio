@@ -23,7 +23,7 @@ export function SynthWaveHeader() {
           className="pointer-events-auto relative flex w-full max-w-4xl flex-col items-center justify-center gap-px sm:gap-0.5"
         >
           <h1
-            className="m-0 font-hero text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold uppercase text-center text-balance tracking-[-0.02em] sm:tracking-tight max-w-[min(100%,40rem)] px-3 leading-none"
+            className="m-0 font-hero text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-center text-balance tracking-[0.02em] sm:tracking-[0.035em] max-w-[min(100%,40rem)] px-3 leading-none"
           >
             <span className="hero-title-gradient hero-title-gradient--glow inline-block">
               {HERO_NAME}
