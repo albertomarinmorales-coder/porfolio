@@ -141,6 +141,8 @@ html.dark {
       --fg-r 0.8s ease-in-out,
       --fg-g 0.8s ease-in-out,
       --fg-b 0.8s ease-in-out;
+    overflow-x: clip;
+    max-width: 100%;
   }
   
   body {
@@ -149,6 +151,8 @@ html.dark {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: clip;
+    max-width: 100%;
   }
   
   /* Transiciones para elementos comunes */

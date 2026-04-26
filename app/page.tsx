@@ -640,14 +640,14 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-background dark">
-      <div className="flex min-h-0 min-h-screen flex-1 flex-col">
+    <main className="flex min-h-screen w-full min-w-0 max-w-full flex-col overflow-x-clip bg-background dark">
+      <div className="flex min-h-0 min-h-screen w-full min-w-0 max-w-full flex-1 flex-col">
         <SynthWaveHeader />
         <LanguageToggle className="hidden md:block" />
         <ThemeToggle className="hidden md:block" />
         <MobileTogglesDock />
         <motion.div
-          className="relative flex min-h-0 flex-1 flex-col"
+          className="relative flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col overflow-x-clip"
           layout
           transition={{
             type: "spring",
@@ -657,7 +657,7 @@ export default function Home() {
           }}
         >
           <SynthwaveMainBackdrop />
-          <div className="relative z-10 flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-x-hidden px-0">
+          <div className="relative z-10 flex min-h-0 w-full min-w-0 max-w-full flex-1 items-center justify-center overflow-x-clip px-3 min-[400px]:px-4 sm:px-5 md:px-6">
             <XMBMenu items={menuItems} onSelect={handleSelect} />
           </div>
         </motion.div>

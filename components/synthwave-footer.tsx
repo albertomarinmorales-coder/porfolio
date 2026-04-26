@@ -97,18 +97,18 @@ export function SynthWaveFooter() {
       {/* Línea superior brillante */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary to-transparent opacity-50" />
 
-      <div className="relative max-w-7xl mx-auto px-6 py-4">
+      <div className="relative max-w-7xl mx-auto w-full min-w-0 px-4 py-4 sm:px-6">
         {/* Contenido principal del footer */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 max-w-5xl mx-auto w-full min-w-0 text-center md:text-left">
           {/* Columna 1: Logo / marca */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="flex flex-col items-start md:items-center justify-start space-y-2"
+            className="flex flex-col items-center md:items-start space-y-2"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3 md:justify-start">
               <div className="w-8 h-8 bg-linear-to-br from-primary to-secondary rounded-lg flex items-center justify-center mt-1">
                 <Code2 className="w-5 h-5 text-background" />
               </div>
@@ -116,9 +116,9 @@ export function SynthWaveFooter() {
                 {portfolioConfig.personal.heroName}
               </h3>
             </div>
-            <div className="flex items-center gap-2 text-xs text-primary/80">
-              <Zap className="w-3 h-3" />
-              <span className="font-mono">Building the future, one line at a time</span>
+            <div className="flex items-center justify-center gap-2 text-xs text-primary/80 md:justify-start">
+              <Zap className="w-3 h-3 shrink-0" />
+              <span className="font-mono text-balance">Building the future, one line at a time</span>
             </div>
           </motion.div>
 
@@ -128,9 +128,9 @@ export function SynthWaveFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="space-y-2 flex flex-col items-start md:items-center"
+            className="space-y-2 flex flex-col items-center md:items-center"
           >
-            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed text-right">
+            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed mx-auto md:mx-0 text-center md:text-left">
               {t("footer.branding.tagline")}
             </p>
           </motion.div>
@@ -141,12 +141,12 @@ export function SynthWaveFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="space-y-2 flex flex-col items-start md:items-center"
+            className="space-y-2 flex flex-col items-center"
           >
             <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">
               {t("footer.connect.title")}
             </h4>
-            <div className="flex gap-2.5">
+            <div className="flex justify-center gap-2.5">
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
                 return (
@@ -230,8 +230,8 @@ export function SynthWaveFooter() {
         </div>
       </div>
 
-      {/* Glow effect en la parte inferior */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[60px] bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
+      {/* Glow effect en la parte inferior (ancho limitado al viewport en móvil) */}
+      <div className="absolute bottom-0 left-1/2 w-[min(100%,24rem)] max-w-[100vw] -translate-x-1/2 h-[60px] bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
     </motion.footer>
   );
 }
