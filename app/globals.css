@@ -207,8 +207,8 @@ html.dark {
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: min(86vw, 30rem);
-    height: min(48vw, 16rem);
+    width: min(84vw, 29rem);
+    height: min(56vw, 19rem);
     border-radius: 50%;
     transform: translate3d(-50%, 40%, 0);
     background: linear-gradient(

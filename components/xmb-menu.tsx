@@ -45,6 +45,27 @@ const subListVariants = {
   },
 };
 
+const subLineVariants = {
+  hidden: { opacity: 0, x: -12, filter: "blur(4px)" as const },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)" as const,
+    transition: { type: "spring" as const, stiffness: 420, damping: 32 },
+  },
+};
+
+/** Contenedor de la lista en escritorio: reparte stagger a los botones */
+const subListStaggerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05, delayChildren: 0.06 },
+  },
+};
+
+const MOBILE_SUBMENU_MQ = "(max-width: 1023px)";
+
 function SubItemThumb({ subItem }: { subItem: SubMenuItem }) {
   if (!subItem.menuImage && !subItem.image) return null;
   return (
@@ -78,6 +99,18 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [subPickerOpen, setSubPickerOpen] = useState(false);
   const subPickerRef = useRef<HTMLDivElement>(null);
+  const [isMobileSubmenu, setIsMobileSubmenu] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_SUBMENU_MQ);
+    setIsMobileSubmenu(mq.matches);
+    const onChange = () => {
+      setIsMobileSubmenu(mq.matches);
+      if (!mq.matches) setSubPickerOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   // Función para cerrar el submenú con animación suave
   const closeSubmenuSmoothly = () => {
@@ -177,7 +210,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
           break;
         case "Escape":
           e.preventDefault();
-          if (subPickerOpen) {
+          if (isMobileSubmenu && subPickerOpen) {
             setSubPickerOpen(false);
             break;
           }
@@ -192,7 +225,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedMain, selectedSub, showSub, subPickerOpen, items, onSelect]);
+  }, [selectedMain, selectedSub, showSub, subPickerOpen, isMobileSubmenu, items, onSelect]);
 
   // Manejar automáticamente el estado del submenú cuando cambia la selección principal
   useEffect(() => {
@@ -216,7 +249,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   }, [selectedMain, showSub]);
 
   useEffect(() => {
-    if (!subPickerOpen) return;
+    if (!subPickerOpen || !isMobileSubmenu) return;
     const onDoc = (e: MouseEvent) => {
       if (subPickerRef.current && !subPickerRef.current.contains(e.target as Node)) {
         setSubPickerOpen(false);
@@ -224,7 +257,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
-  }, [subPickerOpen]);
+  }, [subPickerOpen, isMobileSubmenu]);
 
   // En viewport estrecho, al abrir el submenú llevar el bloque al área visible (evita quedar fuera de pantalla)
   useEffect(() => {
@@ -391,18 +424,19 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                 }}
               >
                 <div className="mb-3 w-full min-w-0 sm:mb-4 lg:mb-5">
-                  <div className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 xl:gap-8">
+                  <div className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-4 lg:flex-row lg:items-stretch lg:justify-center lg:gap-6">
                     <motion.div
                       key={`submenu-list-${selectedMain}`}
                       data-menu-element="subitem"
                       variants={subListVariants}
                       initial="hidden"
                       animate="visible"
-                      className="w-full min-w-0 max-w-lg justify-self-stretch"
+                      className="w-full min-w-0 max-w-lg shrink-0 lg:max-w-[20rem] lg:basis-80 lg:flex lg:justify-start"
                     >
                       {subItems.length > 0 && (() => {
                         const hasMore = subItems.length > 1;
                         const current = subItems[safeSub]!;
+
                         if (!hasMore) {
                           return (
                             <div
@@ -416,6 +450,47 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                             </div>
                           );
                         }
+
+                        if (!isMobileSubmenu) {
+                          return (
+                            <motion.div
+                              variants={subListStaggerVariants}
+                              initial="hidden"
+                              animate="visible"
+                              className="scrollbar-hide flex max-h-[min(45vh,420px)] w-full min-w-0 max-w-md flex-col items-stretch gap-2 overflow-y-auto p-2 min-[400px]:gap-3 min-[400px]:p-3 sm:max-h-[500px] sm:gap-3 sm:p-4 lg:mx-0 lg:w-80 lg:max-w-none lg:shrink-0 lg:items-stretch lg:px-3 lg:py-2"
+                            >
+                              {subItems.map((subItem, index) => (
+                                <motion.button
+                                  key={subItem.id}
+                                  data-menu-element="subitem"
+                                  type="button"
+                                  variants={subLineVariants}
+                                  onClick={() => {
+                                    setSelectedSub(index);
+                                    onSelect?.(items[selectedMain]!.id, subItem.id);
+                                  }}
+                                  className={
+                                    "flex w-full min-w-0 max-w-full cursor-pointer items-center gap-2.5 overflow-hidden rounded-xl px-3 py-2.5 transition-all duration-300 focus:border-transparent focus:outline-none focus:ring-0 min-[400px]:gap-3 min-[400px]:px-4 min-[400px]:py-3 sm:max-w-sm sm:mx-auto sm:w-64 lg:mx-0 lg:w-full lg:max-w-full " +
+                                    (safeSub === index
+                                      ? "glow-secondary border border-secondary/20 bg-secondary/30 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm sm:scale-105"
+                                      : "border border-border/50 bg-background/85 opacity-60 backdrop-blur-sm hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30")
+                                  }
+                                >
+                                  {(subItem.menuImage || subItem.image) && <SubItemThumb subItem={subItem} />}
+                                  <h3
+                                    className={
+                                      "min-w-0 flex-1 break-words text-left text-sm font-medium leading-snug min-[400px]:text-base " +
+                                      (safeSub === index ? "text-secondary" : "text-foreground")
+                                    }
+                                  >
+                                    {subItem.title}
+                                  </h3>
+                                </motion.button>
+                              ))}
+                            </motion.div>
+                          );
+                        }
+
                         return (
                           <div ref={subPickerRef} className="relative w-full min-w-0" data-menu-element="subitem">
                             <button
@@ -485,7 +560,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                     animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                     exit={{ opacity: 0, x: 12, filter: "blur(4px)" }}
                     transition={subSpring}
-                    className="border-primary/30 bg-background/92 flex w-full min-w-0 max-w-lg flex-1 flex-col gap-3 overflow-y-auto rounded-xl border p-4 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md min-[400px]:gap-4 min-[400px]:rounded-2xl min-[400px]:p-5 sm:max-h-[500px] sm:p-6 lg:min-h-0"
+                    className="border-primary/30 bg-background/92 flex w-full min-w-0 max-w-lg shrink-0 flex-col gap-3 overflow-y-auto rounded-xl border p-4 shadow-[0_0_0_1px_oklch(0.55_0.18_300/0.12),0_20px_50px_-20px_oklch(0.45_0.15_280/0.25)] backdrop-blur-md min-[400px]:gap-4 min-[400px]:rounded-2xl min-[400px]:p-5 sm:max-h-[500px] sm:p-6 lg:min-h-0 lg:min-w-0"
                   >
                     <h2 className="text-balance break-words text-lg font-bold text-primary min-[400px]:text-xl sm:text-2xl">
                       {currentSub.title}
