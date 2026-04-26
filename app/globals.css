@@ -177,24 +177,105 @@ html.dark {
                 inset 0 0 8px oklch(var(--secondary) / 0.1);
   }
   
-  /* Grid de fondo estilo retro */
+  /* Rejilla del backdrop como ::before — sin mask-image para evitar capas GPU.
+     El fundido se logra con una capa de color de fondo encima del grid en background-image. */
+  .synthwave-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      /* Capa de fundido (top→transparente→transparente→bottom) usando el color de fondo */
+      linear-gradient(
+        180deg,
+        var(--background) 0%,
+        transparent 18%,
+        transparent 70%,
+        var(--background) 100%
+      ),
+      /* Líneas horizontales */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 94px,
+        oklch(var(--primary) / 0.07) 94px,
+        oklch(var(--primary) / 0.07) 96px
+      ),
+      /* Líneas verticales */
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 94px,
+        oklch(var(--primary) / 0.055) 94px,
+        oklch(var(--primary) / 0.055) 96px
+      );
+  }
+
+  /* Grid de fondo estilo retro (zona del menú XMB, encima del backdrop) */
   .retro-grid {
-    background-image: 
-      linear-gradient(oklch(var(--primary) / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, oklch(var(--primary) / 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 94px,
+        oklch(var(--primary) / 0.045) 94px,
+        oklch(var(--primary) / 0.045) 96px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 94px,
+        oklch(var(--primary) / 0.04) 94px,
+        oklch(var(--primary) / 0.04) 96px
+      );
   }
   
   /* Scanlines efecto CRT sutil */
   .scanlines {
-    background-image: 
+    background-image:
+      /* banda luminosa suave para simular barrido CRT */
+      linear-gradient(
+        180deg,
+        oklch(1 0 0 / 0.035) 0%,
+        transparent 22%,
+        transparent 78%,
+        oklch(0 0 0 / 0.06) 100%
+      ),
+      /* líneas catódicas */
       repeating-linear-gradient(
         0deg,
         transparent,
         transparent 2px,
-        oklch(0 0 0 / 0.02) 2px,
-        oklch(0 0 0 / 0.02) 4px
+        oklch(0 0 0 / 0.07) 2px,
+        oklch(0 0 0 / 0.07) 4px
       );
+  }
+
+  @keyframes crt-flicker {
+    0%, 100% {
+      opacity: 1;
+    }
+    8% {
+      opacity: 0.96;
+    }
+    14% {
+      opacity: 1;
+    }
+    35% {
+      opacity: 0.93;
+    }
+    41% {
+      opacity: 0.99;
+    }
+    62% {
+      opacity: 0.95;
+    }
+    78% {
+      opacity: 1;
+    }
+  }
+
+  .scanlines-crt {
+    animation: crt-flicker 3.2s steps(1, end) infinite;
   }
 
   /* Fondo <main> — horizonte + sol + suelo 3D (synth) */
@@ -203,16 +284,18 @@ html.dark {
       background-position: 0 0, 0 0;
     }
     100% {
-      background-position: 0 320px, 0 240px;
+      /* Múltiplos de 64px en Y (suelo 80×64) */
+      background-position: 0 640px, 0 480px;
     }
   }
 
   .synthwave-main-sun {
     position: absolute;
+    z-index: 5;
     left: 50%;
     bottom: 0;
-    width: min(84vw, 29rem);
-    height: min(56vw, 19rem);
+    width: min(78vw, 27rem);
+    height: min(72vw, 25rem);
     border-radius: 50%;
     transform: translate3d(-50%, 40%, 0);
     background: linear-gradient(
@@ -247,6 +330,7 @@ html.dark {
 
   .synthwave-floor-3d {
     position: absolute;
+    z-index: 0;
     left: 50%;
     bottom: -2%;
     width: 200%;
@@ -271,23 +355,33 @@ html.dark {
   .synthwave-floor-3d::before {
     content: "";
     position: absolute;
+    z-index: 0;
     inset: 0;
-    background-image: linear-gradient(
+    /* Líneas 2.5px (antes 1.5px + 1px) */
+    background-image: repeating-linear-gradient(
         90deg,
-        color-mix(in oklch, var(--secondary) 38%, transparent) 1.5px,
-        transparent 1.5px
+        transparent,
+        transparent calc(80px - 2.5px),
+        color-mix(in oklch, var(--secondary) 38%, transparent) calc(80px - 2.5px),
+        color-mix(in oklch, var(--secondary) 38%, transparent) 80px
       ),
-      linear-gradient(
+      repeating-linear-gradient(
         0deg,
-        color-mix(in oklch, var(--primary) 32%, transparent) 1.5px,
-        transparent 1.5px
+        transparent,
+        transparent calc(64px - 2.5px),
+        color-mix(in oklch, var(--primary) 32%, transparent) calc(64px - 2.5px),
+        color-mix(in oklch, var(--primary) 32%, transparent) 64px
       );
-    background-size: 38px 32px, 38px 32px;
+    background-size: 80px 64px, 80px 64px;
     animation: synthwave-floor-scroll 14s linear infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .synthwave-floor-3d::before {
+      animation: none;
+    }
+
+    .scanlines-crt {
       animation: none;
     }
   }
