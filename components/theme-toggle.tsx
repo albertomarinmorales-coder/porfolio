@@ -6,32 +6,18 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string } = {}) {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Leer tema del localStorage
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      const isDarkTheme = savedTheme === "dark";
-      setIsDark(isDarkTheme);
-      if (isDarkTheme) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+    const isDarkTheme = savedTheme === "dark";
+    setIsDark(isDarkTheme);
+    if (isDarkTheme) {
+      document.documentElement.classList.add("dark");
     } else {
-      // Si no hay tema guardado, usar preferencia del sistema
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDark(prefersDark);
-      if (prefersDark) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 

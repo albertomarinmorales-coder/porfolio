@@ -13,17 +13,15 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const cvHref = language === "en" ? "/CV/CV-en.pdf" : "/CV/CV.pdf";
+  const cvDownloadName = language === "en" ? "Alberto-Marin-CV-EN.pdf" : "Alberto-Marin-CV.pdf";
   const [isDark, setIsDark] = useState(() => {
-    // Solo en el cliente, verificar tema guardado o preferencia del sistema
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem("theme");
-      if (savedTheme) {
-        return savedTheme === "dark";
-      }
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return savedTheme === "dark";
     }
-    return true; // valor por defecto del servidor
+    return false; // por defecto: tema claro
   });
   const [mounted, setMounted] = useState(false);
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
@@ -33,15 +31,8 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     
-    // Detectar el tema actual inmediatamente
     const savedTheme = localStorage.getItem("theme");
-    let currentIsDark = true;
-    
-    if (savedTheme) {
-      currentIsDark = savedTheme === "dark";
-    } else {
-      currentIsDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
+    const currentIsDark = savedTheme === "dark";
     
     console.log("Tema inicial:", currentIsDark ? "oscuro" : "claro");
     setIsDark(currentIsDark);
@@ -437,13 +428,13 @@ export default function Home() {
           id: "cv",
           title: t("resume.title"),
           description: t("resume.description"),
-          showScrollIndicator: true,
+          showScrollIndicator: false,
           content: mounted ? (
-            <div className="flex flex-col gap-6 max-h-[250px] overflow-y-auto scrollbar-hide pr-2">
-              <div className="text-muted-foreground leading-relaxed space-y-6">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-linear-to-br from-primary/30 to-secondary/30 rounded-full flex items-center justify-center border-2 border-primary/50 shadow-[0_0_20px_rgba(6,189,186,0.3)]">
-                    <FileText className="w-8 h-8 text-primary" />
+            <div className="flex flex-col gap-4">
+              <div className="text-muted-foreground leading-relaxed space-y-4">
+                <div className="text-center space-y-3">
+                  <div className="w-14 h-14 mx-auto bg-linear-to-br from-primary/30 to-secondary/30 rounded-full flex items-center justify-center border-2 border-primary/50 shadow-[0_0_20px_rgba(6,189,186,0.3)]">
+                    <FileText className="w-7 h-7 text-primary" />
                   </div>
                   <h3 className="text-primary font-semibold text-lg">{t("resume.title")}</h3>
                   <p className="text-sm max-w-md mx-auto">
@@ -453,8 +444,8 @@ export default function Home() {
                 
                 <div className="flex flex-col gap-3">
                   <a
-                    href="/CV/CV.pdf"
-                    download
+                    href={cvHref}
+                    download={cvDownloadName}
                     className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors group"
                   >
                     <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
@@ -470,7 +461,7 @@ export default function Home() {
                   </a>
 
                   <a
-                    href="/CV/CV.pdf"
+                    href={cvHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-4 rounded-xl bg-secondary/10 border border-secondary/20 hover:bg-secondary/20 transition-colors group"

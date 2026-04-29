@@ -301,7 +301,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
   const hasMultipleSubItems = subItems.length > 1;
 
   return (
-    <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden pt-20 pb-8 sm:min-h-[60vh] sm:pt-28 md:pt-32 md:pb-12">
+    <div className="relative min-h-[50vh] w-full min-w-0 overflow-x-hidden pt-10 pb-8 sm:min-h-[60vh] sm:pt-16 md:pt-20 md:pb-12">
       {/* Indicadores de navegación - OCULTOS */}
       {/* <div className="absolute top-8 right-8 flex gap-2 text-muted-foreground text-sm z-40">
         <kbd className="px-2 py-1 bg-muted rounded border border-border">←→</kbd>
@@ -472,8 +472,8 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                                   className={
                                     "flex w-full min-w-0 max-w-full cursor-pointer items-center gap-2.5 overflow-hidden rounded-xl px-3 py-2.5 transition-all duration-300 focus:border-transparent focus:outline-none focus:ring-0 min-[400px]:gap-3 min-[400px]:px-4 min-[400px]:py-3 sm:max-w-sm sm:mx-auto sm:w-64 lg:mx-0 lg:w-full lg:max-w-full " +
                                     (safeSub === index
-                                      ? "glow-secondary border border-secondary/20 bg-secondary/30 shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm sm:scale-105"
-                                      : "border border-border/50 bg-background/85 opacity-60 backdrop-blur-sm hover:opacity-80 hover:shadow-[0_0_4px_#c485ff] hover:shadow-secondary/30")
+                                      ? "glow-secondary border border-secondary/20 bg-secondary/30 shadow-[0_0_8px_#a855f7,0_0_4px_#a855f7] backdrop-blur-sm sm:scale-105"
+                                      : "border border-border/50 bg-background/85 opacity-60 backdrop-blur-sm hover:opacity-80 hover:shadow-[0_0_4px_#a855f7] hover:shadow-secondary/30")
                                   }
                                 >
                                   {(subItem.menuImage || subItem.image) && <SubItemThumb subItem={subItem} />}
@@ -498,7 +498,7 @@ export function XMBMenu({ items, onSelect }: XMBMenuProps) {
                               onClick={() => setSubPickerOpen((o) => !o)}
                               aria-expanded={subPickerOpen}
                               aria-haspopup="listbox"
-                              className="glow-secondary flex w-full min-w-0 min-h-[52px] items-center justify-between gap-2 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/30 px-3 py-2.5 text-left shadow-[0_0_8px_#c485ff,0_0_4px_#c485ff] backdrop-blur-sm transition-shadow hover:shadow-[0_0_10px_#c485ff] sm:px-4"
+                              className="glow-secondary flex w-full min-w-0 min-h-[52px] items-center justify-between gap-2 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/30 px-3 py-2.5 text-left shadow-[0_0_8px_#a855f7,0_0_4px_#a855f7] backdrop-blur-sm transition-shadow hover:shadow-[0_0_10px_#a855f7] sm:px-4"
                             >
                               <span className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
                                 {(current.menuImage || current.image) && <SubItemThumb subItem={current} />}

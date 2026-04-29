@@ -343,6 +343,22 @@ html.dark {
     isolation: isolate;
   }
 
+  /* Modo claro: sol con degradado atardecer (naranja → morado) */
+  html:not(.dark) .synthwave-main-sun {
+    background: linear-gradient(
+      185deg,
+      #ffd166 0%,
+      #ffa726 22%,
+      #ff7043 45%,
+      #ff3fd2 72%,
+      #a54bff 100%
+    );
+    box-shadow: 0 0 8px 2px color-mix(in oklch, #ffb347 55%, transparent),
+      0 0 40px 12px color-mix(in oklch, #ff7043 50%, transparent),
+      0 0 100px 28px color-mix(in oklch, #a54bff 32%, transparent);
+    filter: saturate(1.25);
+  }
+
   .synthwave-main-sun::before,
   .synthwave-main-sun::after {
     content: "";
